@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { CopyOutlined } from '@ant-design/icons';
 
 import { Breadcrumb, Layout, Menu, theme, Row, Col } from 'antd';
 
-import Map from './Map/Map';
+import { useAppDispatch } from '../../app/hooks';
+
+import { switchReqLoadingStatus } from '../../app/slices/requestSlice';
+
+import Map from '../Map/Map';
 
 import type { MenuProps } from 'antd';
 
@@ -42,9 +46,20 @@ const items: MenuItem[] = [
 
 const App: React.FC = () => {
     const [collapsed, setCollapsed] = useState(false);
+
     const {
         token: { colorBgContainer }
     } = theme.useToken();
+
+    const dispatch = useAppDispatch();
+
+    // /. hooks
+
+    useEffect(() => {
+        dispatch(switchReqLoadingStatus(true));
+    }, []);
+
+    // /. effects
 
     return (
         <div className="App">
