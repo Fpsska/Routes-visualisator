@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 
 import { CopyOutlined } from '@ant-design/icons';
 
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
+import { Breadcrumb, Layout, Menu, theme, Row, Col } from 'antd';
+
+import Map from './Map/Map';
 
 import type { MenuProps } from 'antd';
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Footer, Sider } = Layout;
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -60,18 +62,26 @@ const App: React.FC = () => {
                     />
                 </Sider>
                 <Layout className="site-layout">
-                    <Content>
+                    <Content
+                        style={{ display: 'flex', flexDirection: 'column' }}
+                    >
                         <Breadcrumb style={{ padding: '16px' }}>
                             <Breadcrumb.Item>Map</Breadcrumb.Item>
                         </Breadcrumb>
-                        <div
+                        <Row
                             style={{
+                                flex: '1 1 auto',
                                 height: '100%',
                                 background: colorBgContainer
                             }}
                         >
-                            Leafleat map here
-                        </div>
+                            <Col
+                                span={24}
+                                style={{ overflow: 'hidden' }}
+                            >
+                                <Map />
+                            </Col>
+                        </Row>
                     </Content>
                     <Footer style={{ textAlign: 'center' }}>Footer</Footer>
                 </Layout>
