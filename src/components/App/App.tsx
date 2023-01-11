@@ -8,7 +8,8 @@ import { useAppSelector, useAppDispatch } from '../../app/hooks';
 
 import {
     switchReqLoadingStatus,
-    setReqError
+    setReqError,
+    setCurrentRouteCoords
 } from '../../app/slices/requestSlice';
 
 import Map from '../Map/Map';
@@ -16,11 +17,7 @@ import Preloader from '../Preloader/Preloader';
 
 import { fetchRequestsData } from '../../app/api/fetchRequestsData';
 
-import type { MenuProps } from 'antd';
-
 const { Content, Footer, Sider } = Layout;
-
-type MenuItem = Required<MenuProps>['items'][number];
 
 import './App.css';
 import '../../assets/styles/_reset.scss';
@@ -28,34 +25,13 @@ import '../../assets/styles/style.scss';
 
 // /. imports
 
-function getItem(
-    label: React.ReactNode,
-    key: React.Key,
-    icon?: React.ReactNode,
-    children?: MenuItem[]
-): MenuItem {
-    return {
-        key,
-        icon,
-        children,
-        label
-    } as MenuItem;
-}
-
-const items: MenuItem[] = [
-    getItem('Requests', 'sub1', <CopyOutlined />, [
-        getItem('request №1', '1'),
-        getItem('request №2', '2'),
-        getItem('request №3', '3')
-    ])
-];
-
 const App: React.FC = () => {
-    const { isRequestsDataLoading } = useAppSelector(
+    const { isRequestsDataLoading, requests } = useAppSelector(
         state => state.requestSlice
     );
 
     const [collapsed, setCollapsed] = useState(false);
+    const [menuItems, setMenuItems] = useState<any>([]);
 
     const {
         token: { colorBgContainer }
@@ -65,22 +41,39 @@ const App: React.FC = () => {
 
     // /. hooks
 
+    const onMenuItemClick = (e: any): void => {
+        dispatch(setCurrentRouteCoords({ id: +e.key }));
+    };
+
+    // /. functions
+
     useEffect(() => {
         fetchRequestsData()
             .then(() => {
-                console.log('success');
+                // console.log('success');
                 setTimeout(() => {
                     dispatch(switchReqLoadingStatus(false));
                 }, 2000);
             })
             .catch((err: any) => {
-                console.log('error');
+                // console.log('error');
                 dispatch(setReqError(err.message));
                 setTimeout(() => {
                     dispatch(switchReqLoadingStatus(false));
                 }, 2000);
             });
     }, []);
+
+    useEffect(() => {
+        // generate Menu items elements
+        const requestTemplates = requests.map(template => {
+            return {
+                label: `request №${template.id}`,
+                key: template.id
+            };
+        });
+        setMenuItems(requestTemplates);
+    }, [isRequestsDataLoading, requests]);
 
     // /. effects
 
@@ -96,7 +89,16 @@ const App: React.FC = () => {
                         theme="dark"
                         defaultSelectedKeys={['1']}
                         mode="inline"
-                        items={items}
+                        disabled={isRequestsDataLoading || !requests}
+                        items={[
+                            {
+                                label: 'Requests',
+                                key: 'menu-1',
+                                icon: <CopyOutlined />,
+                                children: menuItems
+                            }
+                        ]}
+                        onClick={e => onMenuItemClick(e)}
                     />
                 </Sider>
                 <Layout className="site-layout">

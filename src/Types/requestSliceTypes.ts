@@ -1,17 +1,18 @@
 interface Icoord {
-    lat_end: number;
     lat_start: number;
-    lng_end: number;
+    lat_end: number;
     lng_start: number;
+    lng_end: number;
 }
 
-interface Irequest {
+export interface Irequest {
     id: number;
     coords: Icoord[];
 }
 
 export interface IrequestSlice {
-    requests: Irequest[];
+    requests: any[];
+    currentRouteCoords: any;
     isRequestsDataLoading: boolean;
     requestsFetchError: null | string;
 }
