@@ -4,11 +4,17 @@ import { CopyOutlined } from '@ant-design/icons';
 
 import { Breadcrumb, Layout, Menu, theme, Row, Col } from 'antd';
 
-import { useAppDispatch } from '../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
 
-import { switchReqLoadingStatus } from '../../app/slices/requestSlice';
+import {
+    switchReqLoadingStatus,
+    setReqError
+} from '../../app/slices/requestSlice';
 
 import Map from '../Map/Map';
+import Preloader from '../Preloader/Preloader';
+
+import { fetchRequestsData } from '../../app/api/fetchRequestsData';
 
 import type { MenuProps } from 'antd';
 
@@ -45,6 +51,10 @@ const items: MenuItem[] = [
 ];
 
 const App: React.FC = () => {
+    const { isRequestsDataLoading } = useAppSelector(
+        state => state.requestSlice
+    );
+
     const [collapsed, setCollapsed] = useState(false);
 
     const {
@@ -56,7 +66,20 @@ const App: React.FC = () => {
     // /. hooks
 
     useEffect(() => {
-        dispatch(switchReqLoadingStatus(true));
+        fetchRequestsData()
+            .then(() => {
+                console.log('success');
+                setTimeout(() => {
+                    dispatch(switchReqLoadingStatus(false));
+                }, 2000);
+            })
+            .catch((err: any) => {
+                console.log('error');
+                dispatch(setReqError(err.message));
+                setTimeout(() => {
+                    dispatch(switchReqLoadingStatus(false));
+                }, 2000);
+            });
     }, []);
 
     // /. effects
@@ -94,7 +117,17 @@ const App: React.FC = () => {
                                 span={24}
                                 style={{ overflow: 'hidden' }}
                             >
-                                <Map />
+                                <div className="map">
+                                    <>
+                                        {isRequestsDataLoading && (
+                                            <div className="map__preloader">
+                                                {' '}
+                                                <Preloader />
+                                            </div>
+                                        )}
+                                    </>
+                                    <Map />
+                                </div>
                             </Col>
                         </Row>
                     </Content>

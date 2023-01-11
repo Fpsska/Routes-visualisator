@@ -4,7 +4,7 @@ import createSagaMiddleware from '@redux-saga/core';
 
 import requestSlice from './slices/requestSlice';
 
-import { fetchRequestsWatcher } from './sagas/requestSaga';
+import { rootWatcher } from './sagas/rootSaga';
 
 // /. imports
 
@@ -15,7 +15,7 @@ export const store = configureStore({
   middleware: [sagaMiddleware]
 });
 
-sagaMiddleware.run(fetchRequestsWatcher);
+sagaMiddleware.run(rootWatcher);
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;

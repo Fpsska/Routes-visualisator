@@ -1,3 +1,22 @@
 .map-container {
     height: 100%;
 }
+
+.map {
+    position: relative;
+    height: 100%;
+
+    &__preloader {
+        position: absolute;
+        z-index: 405;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba($color: #000000, $alpha: .6);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}

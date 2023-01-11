@@ -1,18 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { IrequestSlice } from '../../Types/requestSliceTypes';
+
 // /. imports
-
-interface IrequestSlice {
-    requests: any[];
-    isRequestsDataLoading: boolean;
-    requestsFetchError: null | string;
-}
-
-// /. interfaces
 
 const initialState: IrequestSlice = {
     requests: [],
-    isRequestsDataLoading: false,
+    isRequestsDataLoading: true,
     requestsFetchError: null
 };
 
@@ -27,7 +21,6 @@ const requestSlice = createSlice({
         },
         setRequestsData(state, action: PayloadAction<any[]>) {
             state.requests = action.payload;
-            console.log(action.payload);
         },
         setReqError(state, action: PayloadAction<null | string>) {
             state.requestsFetchError = action.payload;

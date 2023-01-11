@@ -28,8 +28,8 @@ const Map: React.FC = () => {
         <MapContainer
             className="map-container"
             center={position}
-            zoom={16}
-            scrollWheelZoom={true}
+            zoom={13}
+            scrollWheelZoom={false}
         >
             <TileLayer
                 attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'

@@ -5,7 +5,7 @@ export async function fetchRequestsData(): Promise<any> {
         const response = await fetch(URL);
 
         if (!response.ok) {
-            throw new Error('some error with response');
+            return new Error('some error with response');
         }
 
         return await response.json();
