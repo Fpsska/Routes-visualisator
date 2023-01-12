@@ -7,9 +7,9 @@ import { IrequestSlice, Irequest } from '../../Types/requestSliceTypes';
 const initialState: IrequestSlice = {
     requests: [],
     currentRouteCoords: {
-        lat_start: 51,
-        lat_end: 19,
-        lng_start: 0,
+        lat_start: 49.28594,
+        lng_start: -123.11129,
+        lat_end: 0,
         lng_end: 0
     },
     isRequestsDataLoading: true,

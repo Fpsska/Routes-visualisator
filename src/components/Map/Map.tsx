@@ -2,36 +2,28 @@ import React, { useState, useEffect } from 'react';
 
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
-import Leaflet from 'leaflet';
-
-import icon from 'leaflet/dist/images/marker-icon.png';
-import iconShadow from 'leaflet/dist/images/marker-shadow.png';
-
 import { useAppSelector } from '../../app/hooks';
 
 import 'leaflet/dist/leaflet.css';
+import 'leaflet-defaulticon-compatibility';
+import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 import './map.scss';
 
 // /. imports
 
-const DefaultIcon = Leaflet.icon({
-    iconUrl: icon,
-    shadowUrl: iconShadow
-});
-
-Leaflet.Marker.prototype.options.icon = DefaultIcon;
-
 const Map: React.FC = () => {
     const { currentRouteCoords } = useAppSelector(state => state.requestSlice);
 
-    const [latPosition, setLatPosition] = useState<[number, number]>([51, 19]);
+    const [startPosition, setStartPosition] = useState<[number, number]>([
+        49.28594, -123.11129
+    ]); // latitude_start + longitude_start
 
     // /. hooks
 
     useEffect(() => {
-        setLatPosition([
+        setStartPosition([
             currentRouteCoords.lat_start,
-            currentRouteCoords.lat_end
+            currentRouteCoords.lng_start
         ]);
     }, [currentRouteCoords]);
 
@@ -40,16 +32,16 @@ const Map: React.FC = () => {
     return (
         <MapContainer
             className="map-container"
-            center={latPosition}
+            center={startPosition}
             zoom={13}
-            scrollWheelZoom={false}
+            scrollWheelZoom={true}
         >
             <TileLayer
                 attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
                 url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
             />
 
-            <Marker position={latPosition}>
+            <Marker position={startPosition}>
                 <Popup>
                     A pretty CSS3 popup. <br /> Easily customizable.
                 </Popup>

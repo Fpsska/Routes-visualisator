@@ -1,7 +1,7 @@
 interface Icoord {
     lat_start: number;
-    lat_end: number;
     lng_start: number;
+    lat_end: number;
     lng_end: number;
 }
 
