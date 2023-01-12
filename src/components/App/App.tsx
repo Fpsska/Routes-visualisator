@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { CopyOutlined } from '@ant-design/icons';
+import { MapContainer } from 'react-leaflet';
 
 import { Breadcrumb, Layout, Menu, theme, Row, Col } from 'antd';
 
@@ -26,9 +27,8 @@ import '../../assets/styles/style.scss';
 // /. imports
 
 const App: React.FC = () => {
-    const { isRequestsDataLoading, requests } = useAppSelector(
-        state => state.requestSlice
-    );
+    const { isRequestsDataLoading, requests, currentRouteData } =
+        useAppSelector(state => state.requestSlice);
 
     const [collapsed, setCollapsed] = useState(false);
     const [menuItems, setMenuItems] = useState<any>([]);
@@ -74,6 +74,10 @@ const App: React.FC = () => {
         });
         setMenuItems(requestTemplates);
     }, [isRequestsDataLoading, requests]);
+
+    useEffect(() => {
+        console.log(currentRouteData.coords.lat_start);
+    }, [currentRouteData]);
 
     // /. effects
 
@@ -123,12 +127,21 @@ const App: React.FC = () => {
                                     <>
                                         {isRequestsDataLoading && (
                                             <div className="map__preloader">
-                                                {' '}
                                                 <Preloader />
                                             </div>
                                         )}
                                     </>
-                                    <Map />
+                                    <MapContainer
+                                        className="map-container"
+                                        center={[
+                                            currentRouteData.coords.lat_start,
+                                            currentRouteData.coords.lng_start
+                                        ]}
+                                        zoom={8}
+                                        scrollWheelZoom={true}
+                                    >
+                                        <Map />
+                                    </MapContainer>
                                 </div>
                             </Col>
                         </Row>

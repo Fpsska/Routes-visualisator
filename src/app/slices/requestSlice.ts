@@ -6,11 +6,16 @@ import { IrequestSlice, Irequest } from '../../Types/requestSliceTypes';
 
 const initialState: IrequestSlice = {
     requests: [],
-    currentRouteCoords: {
-        lat_start: 49.28594,
-        lng_start: -123.11129,
-        lat_end: 0,
-        lng_end: 0
+    currentRouteData: {
+        // latitude_start + longitude_start
+        // latitude_end + longitude_end
+        label: 'untitled',
+        coords: {
+            lat_start: 49.28594,
+            lng_start: 42.11129,
+            lat_end: 0,
+            lng_end: 0
+        }
     },
     isRequestsDataLoading: true,
     requestsFetchError: null
@@ -37,12 +42,14 @@ const requestSlice = createSlice({
             // /. payload
             const targetRoute = state.requests.find(route => route.id === id);
             if (targetRoute) {
-                state.currentRouteCoords.lat_start =
+                state.currentRouteData.coords.lat_start =
                     targetRoute.coords.lat_start;
-                state.currentRouteCoords.lat_end = targetRoute.coords.lat_end;
-                state.currentRouteCoords.lng_start =
+                state.currentRouteData.coords.lat_end =
+                    targetRoute.coords.lat_end;
+                state.currentRouteData.coords.lng_start =
                     targetRoute.coords.lng_start;
-                state.currentRouteCoords.lng_end = targetRoute.coords.lng_end;
+                state.currentRouteData.coords.lng_end =
+                    targetRoute.coords.lng_end;
             }
         }
     }

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 
 import { useAppSelector } from '../../app/hooks';
 
@@ -12,41 +12,49 @@ import './map.scss';
 // /. imports
 
 const Map: React.FC = () => {
-    const { currentRouteCoords } = useAppSelector(state => state.requestSlice);
+    const { currentRouteData } = useAppSelector(state => state.requestSlice);
 
-    const [startPosition, setStartPosition] = useState<[number, number]>([
-        49.28594, -123.11129
-    ]); // latitude_start + longitude_start
+    const map = useMap();
 
     // /. hooks
 
     useEffect(() => {
-        setStartPosition([
-            currentRouteCoords.lat_start,
-            currentRouteCoords.lng_start
-        ]);
-    }, [currentRouteCoords]);
+        // follow to new position
+        const COORDS: [number, number] = [
+            currentRouteData.coords.lat_start,
+            currentRouteData.coords.lng_start
+        ];
+        const ZOOM = 14;
+
+        map.flyTo(COORDS, ZOOM, {
+            duration: 2
+        });
+    }, [currentRouteData]);
 
     // /. effects
 
     return (
-        <MapContainer
-            className="map-container"
-            center={startPosition}
-            zoom={13}
-            scrollWheelZoom={true}
-        >
+        <>
             <TileLayer
                 attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
                 url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
             />
-
-            <Marker position={startPosition}>
+            <Marker
+                position={[
+                    currentRouteData.coords.lat_start,
+                    currentRouteData.coords.lng_start
+                ]}
+            >
+                {' '}
                 <Popup>
-                    A pretty CSS3 popup. <br /> Easily customizable.
-                </Popup>
+                    <ul>
+                        <li>Location: {currentRouteData.label}</li>
+                        <li>latitude: {currentRouteData.coords.lat_start}</li>
+                        <li>longitude: {currentRouteData.coords.lng_start}</li>
+                    </ul>
+                </Popup>{' '}
             </Marker>
-        </MapContainer>
+        </>
     );
 };
 
