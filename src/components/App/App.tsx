@@ -14,6 +14,7 @@ import {
 } from '../../app/slices/requestSlice';
 
 import Map from '../Map/Map';
+import MapPlaceholder from '../Map/MapPlaceholder';
 import Preloader from '../Preloader/Preloader';
 
 import { fetchRequestsData } from '../../app/api/fetchRequestsData';
@@ -135,6 +136,7 @@ const App: React.FC = () => {
                                         ]}
                                         zoom={8}
                                         scrollWheelZoom={true}
+                                        placeholder={<MapPlaceholder />}
                                     >
                                         <Map />
                                     </MapContainer>

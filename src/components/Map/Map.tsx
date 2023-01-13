@@ -6,6 +6,8 @@ import { useAppSelector } from '../../app/hooks';
 
 import { IcurrentRoute } from '../../Types/requestSliceTypes';
 
+import { getCustomMarker } from '../../helpers/getCustomMarker';
+
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
@@ -48,6 +50,9 @@ const Map: React.FC = () => {
                         <Marker
                             key={route.id}
                             position={[route.coords.lat, route.coords.lng]}
+                            icon={getCustomMarker(
+                                route.role === 'start' ? 'blue' : 'green'
+                            )}
                         >
                             <Popup>
                                 <ul>
