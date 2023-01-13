@@ -6,17 +6,27 @@ import { IrequestSlice, Irequest } from '../../Types/requestSliceTypes';
 
 const initialState: IrequestSlice = {
     requests: [],
-    currentRouteData: {
-        // latitude_start + longitude_start
-        // latitude_end + longitude_end
-        label: 'untitled',
-        coords: {
-            lat_start: 49.28594,
-            lng_start: 42.11129,
-            lat_end: 0,
-            lng_end: 0
+    // (lat)itude + (long)itude
+    currentRoutesData: [
+        {
+            id: 1,
+            role: 'start',
+            label: 'Start Location Name',
+            coords: {
+                lat: 59.84660399,
+                lng: 30.29496392
+            }
+        },
+        {
+            id: 2,
+            role: 'end',
+            label: 'End Location Name',
+            coords: {
+                lat: 59.82934196,
+                lng: 30.42423701
+            }
         }
-    },
+    ],
     isRequestsDataLoading: true,
     requestsFetchError: null
 };
@@ -40,16 +50,21 @@ const requestSlice = createSlice({
         setCurrentRouteCoords(state, action: PayloadAction<{ id: number }>) {
             const { id } = action.payload;
             // /. payload
-            const targetRoute = state.requests.find(route => route.id === id);
-            if (targetRoute) {
-                state.currentRouteData.coords.lat_start =
-                    targetRoute.coords.lat_start;
-                state.currentRouteData.coords.lat_end =
-                    targetRoute.coords.lat_end;
-                state.currentRouteData.coords.lng_start =
-                    targetRoute.coords.lng_start;
-                state.currentRouteData.coords.lng_end =
-                    targetRoute.coords.lng_end;
+            const targetAPIRoute = state.requests.find(
+                route => route.id === id
+            );
+            const targetStartRoute = state.currentRoutesData.find(
+                route => route.role === 'start'
+            );
+            const targetEndRoute = state.currentRoutesData.find(
+                route => route.role === 'end'
+            );
+            if (targetAPIRoute && targetStartRoute && targetEndRoute) {
+                targetStartRoute.coords.lat = targetAPIRoute.coords.lat_start;
+                targetStartRoute.coords.lng = targetAPIRoute.coords.lng_start;
+                //
+                targetEndRoute.coords.lat = targetAPIRoute.coords.lat_end;
+                targetEndRoute.coords.lng = targetAPIRoute.coords.lng_end;
             }
         }
     }

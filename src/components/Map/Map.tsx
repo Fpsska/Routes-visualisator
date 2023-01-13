@@ -4,6 +4,8 @@ import { TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 
 import { useAppSelector } from '../../app/hooks';
 
+import { IcurrentRoute } from '../../Types/requestSliceTypes';
+
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
@@ -12,24 +14,25 @@ import './map.scss';
 // /. imports
 
 const Map: React.FC = () => {
-    const { currentRouteData } = useAppSelector(state => state.requestSlice);
+    const { currentRoutesData } = useAppSelector(state => state.requestSlice);
 
     const map = useMap();
 
     // /. hooks
 
+    // /. functions
+
     useEffect(() => {
         // follow to new position
         const COORDS: [number, number] = [
-            currentRouteData.coords.lat_start,
-            currentRouteData.coords.lng_start
+            currentRoutesData[0].coords.lat,
+            currentRoutesData[0].coords.lng
         ];
         const ZOOM = 14;
-
         map.flyTo(COORDS, ZOOM, {
             duration: 2
         });
-    }, [currentRouteData]);
+    }, [currentRoutesData]);
 
     // /. effects
 
@@ -39,21 +42,24 @@ const Map: React.FC = () => {
                 attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
                 url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
             />
-            <Marker
-                position={[
-                    currentRouteData.coords.lat_start,
-                    currentRouteData.coords.lng_start
-                ]}
-            >
-                {' '}
-                <Popup>
-                    <ul>
-                        <li>Location: {currentRouteData.label}</li>
-                        <li>latitude: {currentRouteData.coords.lat_start}</li>
-                        <li>longitude: {currentRouteData.coords.lng_start}</li>
-                    </ul>
-                </Popup>{' '}
-            </Marker>
+            <>
+                {currentRoutesData.map((route: IcurrentRoute) => {
+                    return (
+                        <Marker
+                            key={route.id}
+                            position={[route.coords.lat, route.coords.lng]}
+                        >
+                            <Popup>
+                                <ul>
+                                    <li>Location: {route.label}</li>
+                                    <li>latitude: {route.coords.lat}</li>
+                                    <li>longitude: {route.coords.lng}</li>
+                                </ul>
+                            </Popup>
+                        </Marker>
+                    );
+                })}
+            </>
         </>
     );
 };

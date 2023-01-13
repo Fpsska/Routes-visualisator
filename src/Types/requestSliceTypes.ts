@@ -11,13 +11,16 @@ export interface Irequest extends Icoord {
     id: number;
 }
 
-interface IcurrentRoute extends Icoord {
+export interface IcurrentRoute {
+    id: number;
+    role: string;
     label: string;
+    coords: { lat: number; lng: number };
 }
 
 export interface IrequestSlice {
     requests: Irequest[];
-    currentRouteData: IcurrentRoute;
+    currentRoutesData: IcurrentRoute[];
     isRequestsDataLoading: boolean;
     requestsFetchError: null | string;
 }

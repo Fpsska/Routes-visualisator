@@ -27,7 +27,7 @@ import '../../assets/styles/style.scss';
 // /. imports
 
 const App: React.FC = () => {
-    const { isRequestsDataLoading, requests, currentRouteData } =
+    const { isRequestsDataLoading, requests, currentRoutesData } =
         useAppSelector(state => state.requestSlice);
 
     const [collapsed, setCollapsed] = useState(false);
@@ -74,10 +74,6 @@ const App: React.FC = () => {
         });
         setMenuItems(requestTemplates);
     }, [isRequestsDataLoading, requests]);
-
-    useEffect(() => {
-        console.log(currentRouteData.coords.lat_start);
-    }, [currentRouteData]);
 
     // /. effects
 
@@ -134,8 +130,8 @@ const App: React.FC = () => {
                                     <MapContainer
                                         className="map-container"
                                         center={[
-                                            currentRouteData.coords.lat_start,
-                                            currentRouteData.coords.lng_start
+                                            currentRoutesData[0].coords.lat,
+                                            currentRoutesData[0].coords.lng
                                         ]}
                                         zoom={8}
                                         scrollWheelZoom={true}
