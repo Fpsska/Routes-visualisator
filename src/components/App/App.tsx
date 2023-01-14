@@ -13,11 +13,17 @@ import {
     setCurrentRouteCoords
 } from '../../app/slices/requestSlice';
 
+import {
+    switchPolyLoadingStatus,
+    setPolyError
+} from '../../app/slices/polylineSlice';
+
 import Map from '../Map/Map';
 import MapPlaceholder from '../Map/MapPlaceholder';
 import Preloader from '../Preloader/Preloader';
 
 import { fetchRequestsData } from '../../app/api/fetchRequestsData';
+import { fetchPolylineData } from '../../app/api/fetchPolylineData';
 
 const { Content, Footer, Sider } = Layout;
 
@@ -30,6 +36,9 @@ import '../../assets/styles/style.scss';
 const App: React.FC = () => {
     const { isRequestsDataLoading, requests, currentRoutesData } =
         useAppSelector(state => state.requestSlice);
+    const { isPolylineDataLoading, polylineData } = useAppSelector(
+        state => state.polylineSlice
+    );
 
     const [collapsed, setCollapsed] = useState(false);
     const [menuItems, setMenuItems] = useState<any>([]);
@@ -49,19 +58,15 @@ const App: React.FC = () => {
     // /. functions
 
     useEffect(() => {
-        fetchRequestsData()
+        Promise.all([fetchRequestsData, fetchPolylineData])
             .then(() => {
-                // console.log('success');
                 setTimeout(() => {
                     dispatch(switchReqLoadingStatus(false));
+                    dispatch(switchPolyLoadingStatus(false));
                 }, 2000);
             })
-            .catch((err: any) => {
-                // console.log('error');
-                dispatch(setReqError(err.message));
-                setTimeout(() => {
-                    dispatch(switchReqLoadingStatus(false));
-                }, 2000);
+            .catch(() => {
+                console.error('error');
             });
     }, []);
 
@@ -90,7 +95,11 @@ const App: React.FC = () => {
                         theme="dark"
                         defaultSelectedKeys={['1']}
                         mode="inline"
-                        disabled={isRequestsDataLoading || !requests}
+                        disabled={
+                            isRequestsDataLoading ||
+                            isPolylineDataLoading ||
+                            !requests
+                        }
                         items={[
                             {
                                 label: 'Requests',
@@ -122,11 +131,12 @@ const App: React.FC = () => {
                             >
                                 <div className="map">
                                     <>
-                                        {isRequestsDataLoading && (
-                                            <div className="map__preloader">
-                                                <Preloader />
-                                            </div>
-                                        )}
+                                        {isRequestsDataLoading &&
+                                            isPolylineDataLoading && (
+                                                <div className="map__preloader">
+                                                    <Preloader />
+                                                </div>
+                                            )}
                                     </>
                                     <MapContainer
                                         className="map-container"

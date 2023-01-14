@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
-import { TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
+
+import polyline from '@mapbox/polyline';
 
 import { useAppSelector } from '../../app/hooks';
 
@@ -17,12 +19,13 @@ import './map.scss';
 
 const Map: React.FC = () => {
     const { currentRoutesData } = useAppSelector(state => state.requestSlice);
+    const { polylineData } = useAppSelector(state => state.polylineSlice);
+
+    const [polylineCoords, setPolylineCoords] = useState<any[]>([]);
 
     const map = useMap();
 
     // /. hooks
-
-    // /. functions
 
     useEffect(() => {
         // follow to new position
@@ -35,6 +38,17 @@ const Map: React.FC = () => {
             duration: 2
         });
     }, [currentRoutesData]);
+
+    useEffect(() => {
+        // transform getted OSRM API data to latlng-format
+        const routesData = polylineData.routes;
+
+        if (routesData) {
+            const encodedLine = routesData[0].geometry;
+            const waypointsData = polyline.decode(encodedLine);
+            setPolylineCoords(waypointsData);
+        }
+    }, [polylineData]);
 
     // /. effects
 
@@ -65,6 +79,7 @@ const Map: React.FC = () => {
                     );
                 })}
             </>
+            <Polyline positions={polylineCoords} />
         </>
     );
 };

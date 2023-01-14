@@ -3,6 +3,7 @@ import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import createSagaMiddleware from '@redux-saga/core';
 
 import requestSlice from './slices/requestSlice';
+import polylineSlice from './slices/polylineSlice';
 
 import { rootWatcher } from './sagas/rootSaga';
 
@@ -11,7 +12,7 @@ import { rootWatcher } from './sagas/rootSaga';
 const sagaMiddleware = createSagaMiddleware();
 
 export const store = configureStore({
-  reducer: { requestSlice },
+  reducer: { requestSlice, polylineSlice },
   middleware: [sagaMiddleware]
 });
 

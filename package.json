@@ -5,6 +5,7 @@
   "private": true,
   "homepage": "https://Fpsska.github.io/ILS-Task",
   "dependencies": {
+    "@mapbox/polyline": "^1.1.1",
     "@reduxjs/toolkit": "^1.9.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -55,6 +56,7 @@
   },
   "devDependencies": {
     "@types/leaflet": "^1.9.0",
+    "@types/mapbox__polyline": "^1.0.2",
     "@types/react-leaflet": "^2.8.2",
     "@typescript-eslint/eslint-plugin": "^5.48.0",
     "@typescript-eslint/parser": "^5.48.0",
