@@ -2,18 +2,24 @@ import { call, put, takeEvery, select } from 'redux-saga/effects';
 
 import { fetchPolylineData } from '../api/fetchPolylineData';
 
-import {
-    setPolylineData,
-    switchPolyLoadingStatus
-} from '../slices/polylineSlice';
+import { setPolylineData, triggerPolylineFetch } from '../slices/polylineSlice';
 
 // /. imports
+
+interface Iargs {
+    lng_start: number;
+    lat_start: number;
+    lng_end: number;
+    lat_end: number;
+}
+
+// /. interfaces
 
 function* fetchPolylineWorker(): any {
     // business logic
     const { currentRoutesData } = yield select(state => state.requestSlice);
 
-    const args = {
+    const args: Iargs = yield {
         lng_start: currentRoutesData[0].coords.lng,
         lat_start: currentRoutesData[0].coords.lat,
         lng_end: currentRoutesData[1].coords.lng,
@@ -26,5 +32,5 @@ function* fetchPolylineWorker(): any {
 
 export function* fetchPolylineWatcher(): any {
     // watching for AC of slice
-    yield takeEvery(switchPolyLoadingStatus.type, fetchPolylineWorker);
+    yield takeEvery(triggerPolylineFetch.type, fetchPolylineWorker);
 }

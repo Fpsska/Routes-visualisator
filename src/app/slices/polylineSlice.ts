@@ -32,11 +32,18 @@ const polylineSlice = createSlice({
         setPolyError(state, action: PayloadAction<null | string>) {
             state.polylineFetchError = action.payload;
             state.isPolylineDataLoading = false;
+        },
+        triggerPolylineFetch() {
+            return;
         }
     }
 });
 
-export const { switchPolyLoadingStatus, setPolylineData, setPolyError } =
-    polylineSlice.actions;
+export const {
+    switchPolyLoadingStatus,
+    setPolylineData,
+    setPolyError,
+    triggerPolylineFetch
+} = polylineSlice.actions;
 
 export default polylineSlice.reducer;

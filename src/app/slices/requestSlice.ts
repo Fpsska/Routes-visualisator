@@ -66,6 +66,9 @@ const requestSlice = createSlice({
                 targetEndRoute.coords.lat = targetAPIRoute.coords.lat_end;
                 targetEndRoute.coords.lng = targetAPIRoute.coords.lng_end;
             }
+        },
+        triggerRequestsDataFetch() {
+            return;
         }
     }
 });
@@ -74,7 +77,8 @@ export const {
     setRequestsData,
     switchReqLoadingStatus,
     setReqError,
-    setCurrentRouteCoords
+    setCurrentRouteCoords,
+    triggerRequestsDataFetch
 } = requestSlice.actions;
 
 export default requestSlice.reducer;

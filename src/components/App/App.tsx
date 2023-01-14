@@ -10,12 +10,14 @@ import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
     switchReqLoadingStatus,
     setReqError,
-    setCurrentRouteCoords
+    setCurrentRouteCoords,
+    triggerRequestsDataFetch
 } from '../../app/slices/requestSlice';
 
 import {
     switchPolyLoadingStatus,
-    setPolyError
+    setPolyError,
+    triggerPolylineFetch
 } from '../../app/slices/polylineSlice';
 
 import Map from '../Map/Map';
@@ -36,7 +38,7 @@ import '../../assets/styles/style.scss';
 const App: React.FC = () => {
     const { isRequestsDataLoading, requests, currentRoutesData } =
         useAppSelector(state => state.requestSlice);
-    const { isPolylineDataLoading, polylineData } = useAppSelector(
+    const { isPolylineDataLoading } = useAppSelector(
         state => state.polylineSlice
     );
 
@@ -53,6 +55,8 @@ const App: React.FC = () => {
 
     const onMenuItemClick = (e: any): void => {
         dispatch(setCurrentRouteCoords({ id: +e.key }));
+        dispatch(triggerPolylineFetch());
+        dispatch(triggerRequestsDataFetch());
     };
 
     // /. functions
@@ -60,6 +64,8 @@ const App: React.FC = () => {
     useEffect(() => {
         Promise.all([fetchRequestsData, fetchPolylineData])
             .then(() => {
+                dispatch(triggerPolylineFetch());
+                dispatch(triggerRequestsDataFetch());
                 setTimeout(() => {
                     dispatch(switchReqLoadingStatus(false));
                     dispatch(switchPolyLoadingStatus(false));

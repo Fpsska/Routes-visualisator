@@ -3,7 +3,7 @@ import { call, put, takeEvery } from 'redux-saga/effects';
 import { fetchRequestsData } from '../api/fetchRequestsData';
 import {
     setRequestsData,
-    switchReqLoadingStatus
+    triggerRequestsDataFetch
 } from '../slices/requestSlice';
 
 // /. imports
@@ -16,7 +16,7 @@ function* fetchRequestsWorker(): any {
 
 export function* fetchRequestsWatcher(): any {
     // watching for AC of slice
-    yield takeEvery(switchReqLoadingStatus.type, fetchRequestsWorker);
+    yield takeEvery(triggerRequestsDataFetch.type, fetchRequestsWorker);
 }
 
 // export function* rootSaga(): any {
