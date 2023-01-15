@@ -5,11 +5,11 @@ export async function fetchRequestsData(): Promise<any> {
         const response = await fetch(URL);
 
         if (!response.ok) {
-            return new Error('some error with response');
+            throw new Error('some error with response of my-json-server');
         }
 
         return await response.json();
     } catch (err: any) {
-        console.error(err.message);
+        console.error('Error of my-json-server:', err.message);
     }
 }

@@ -41,10 +41,8 @@ const Map: React.FC = () => {
 
     useEffect(() => {
         // transform getted OSRM API data to latlng-format
-        const routesData = polylineData.routes;
-
-        if (routesData) {
-            const encodedLine = routesData[0].geometry;
+        if (polylineData) {
+            const encodedLine = polylineData.routes[0].geometry;
             const waypointsData = polyline.decode(encodedLine);
             setPolylineCoords(waypointsData);
         }

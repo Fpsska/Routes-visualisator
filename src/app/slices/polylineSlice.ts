@@ -11,7 +11,7 @@ interface IpolylineSlice {
 // /. interfaces
 
 const initialState: IpolylineSlice = {
-    polylineData: [],
+    polylineData: null,
     isPolylineDataLoading: true,
     polylineFetchError: null
 };
@@ -26,8 +26,8 @@ const polylineSlice = createSlice({
             state.isPolylineDataLoading = action.payload;
         },
         setPolylineData(state, action: PayloadAction<any>) {
-            console.log(action.payload);
             state.polylineData = action.payload;
+            console.log(action.payload);
         },
         setPolyError(state, action: PayloadAction<null | string>) {
             state.polylineFetchError = action.payload;

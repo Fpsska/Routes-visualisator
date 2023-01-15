@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { CopyOutlined } from '@ant-design/icons';
 import { MapContainer } from 'react-leaflet';
 
-import { Breadcrumb, Layout, Menu, theme, Row, Col } from 'antd';
+import { Layout, Menu, theme, Row, Col } from 'antd';
 
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 
@@ -38,7 +38,7 @@ import '../../assets/styles/style.scss';
 const App: React.FC = () => {
     const { isRequestsDataLoading, requests, currentRoutesData } =
         useAppSelector(state => state.requestSlice);
-    const { isPolylineDataLoading } = useAppSelector(
+    const { isPolylineDataLoading, polylineData } = useAppSelector(
         state => state.polylineSlice
     );
 
@@ -52,6 +52,14 @@ const App: React.FC = () => {
     const dispatch = useAppDispatch();
 
     // /. hooks
+
+    const isValidCondition =
+        !isRequestsDataLoading &&
+        !isPolylineDataLoading &&
+        requests &&
+        polylineData;
+
+    // /. variables
 
     const onMenuItemClick = (e: any): void => {
         dispatch(setCurrentRouteCoords({ id: +e.key }));
@@ -71,8 +79,10 @@ const App: React.FC = () => {
                     dispatch(switchPolyLoadingStatus(false));
                 }, 2000);
             })
-            .catch(() => {
-                console.error('error');
+            .catch((error: any) => {
+                console.error('error:', error);
+                // dispatch(setPolyError());
+                // dispatch(setReqError())
             });
     }, []);
 
@@ -101,11 +111,7 @@ const App: React.FC = () => {
                         theme="dark"
                         defaultSelectedKeys={['1']}
                         mode="inline"
-                        disabled={
-                            isRequestsDataLoading ||
-                            isPolylineDataLoading ||
-                            !requests
-                        }
+                        disabled={!isValidCondition}
                         items={[
                             {
                                 label: 'Requests',
@@ -121,9 +127,33 @@ const App: React.FC = () => {
                     <Content
                         style={{ display: 'flex', flexDirection: 'column' }}
                     >
-                        <Breadcrumb style={{ padding: '16px' }}>
-                            <Breadcrumb.Item>Map</Breadcrumb.Item>
-                        </Breadcrumb>
+                        <Row style={{ padding: '10px' }}>
+                            <ul
+                                style={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                {currentRoutesData.map(route => {
+                                    return (
+                                        <li
+                                            key={route.id}
+                                            style={{
+                                                margin: '5px'
+                                            }}
+                                        >
+                                            {route.role === 'start'
+                                                ? 'Start'
+                                                : 'End'}
+                                            : <b>lat: {route.coords.lat}</b>
+                                            {' / '}
+                                            <b>lng: {route.coords.lng}</b>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        </Row>
                         <Row
                             style={{
                                 flex: '1 1 auto',
@@ -137,12 +167,11 @@ const App: React.FC = () => {
                             >
                                 <div className="map">
                                     <>
-                                        {isRequestsDataLoading &&
-                                            isPolylineDataLoading && (
-                                                <div className="map__preloader">
-                                                    <Preloader />
-                                                </div>
-                                            )}
+                                        {!isValidCondition && (
+                                            <div className="map__preloader">
+                                                <Preloader />
+                                            </div>
+                                        )}
                                     </>
                                     <MapContainer
                                         className="map-container"
@@ -160,7 +189,7 @@ const App: React.FC = () => {
                             </Col>
                         </Row>
                     </Content>
-                    <Footer style={{ textAlign: 'center' }}>Footer</Footer>
+                    <Footer style={{ padding: 0 }}></Footer>
                 </Layout>
             </Layout>
         </div>
