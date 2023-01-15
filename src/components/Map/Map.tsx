@@ -19,7 +19,9 @@ import './map.scss';
 
 const Map: React.FC = () => {
     const { currentRoutesData } = useAppSelector(state => state.requestSlice);
-    const { polylineData } = useAppSelector(state => state.polylineSlice);
+    const { polylineData, isPolylineDataLoading } = useAppSelector(
+        state => state.polylineSlice
+    );
 
     const [polylineCoords, setPolylineCoords] = useState<any[]>([]);
 
@@ -44,9 +46,10 @@ const Map: React.FC = () => {
         if (polylineData) {
             const encodedLine = polylineData.routes[0].geometry;
             const waypointsData = polyline.decode(encodedLine);
-            setPolylineCoords(waypointsData);
+            // display polyline only after is polylineData is loaded
+            !isPolylineDataLoading && setPolylineCoords(waypointsData);
         }
-    }, [polylineData]);
+    }, [polylineData, isPolylineDataLoading]);
 
     // /. effects
 
