@@ -11,11 +11,11 @@ import {
     switchReqLoadingStatus,
     setReqError,
     setCurrentRouteCoords,
-    triggerRequestsDataFetch
+    triggerRequestsDataFetch,
+    setCoordsDataEmptyStatus
 } from '../../app/slices/requestSlice';
 
 import {
-    switchPolyLoadingStatus,
     setPolyError,
     triggerPolylineFetch
 } from '../../app/slices/polylineSlice';
@@ -36,11 +36,13 @@ import '../../assets/styles/style.scss';
 // /. imports
 
 const App: React.FC = () => {
-    const { isRequestsDataLoading, requests, currentRoutesData } =
-        useAppSelector(state => state.requestSlice);
-    const { isPolylineDataLoading, polylineData } = useAppSelector(
-        state => state.polylineSlice
-    );
+    const {
+        isRequestsDataLoading,
+        requests,
+        currentRoutesData,
+        isCoordsDataEmpty
+    } = useAppSelector(state => state.requestSlice);
+    const { polylineData } = useAppSelector(state => state.polylineSlice);
 
     const [collapsed, setCollapsed] = useState(false);
     const [menuItems, setMenuItems] = useState<any>([]);
@@ -53,38 +55,66 @@ const App: React.FC = () => {
 
     // /. hooks
 
-    const isValidCondition =
-        !isRequestsDataLoading &&
-        !isPolylineDataLoading &&
-        requests &&
-        polylineData;
+    const isValidCondition = !isRequestsDataLoading && requests;
 
     // /. variables
 
     const onMenuItemClick = (e: any): void => {
         dispatch(setCurrentRouteCoords({ id: +e.key }));
-        dispatch(triggerPolylineFetch());
-        dispatch(triggerRequestsDataFetch());
     };
 
     // /. functions
 
     useEffect(() => {
-        Promise.all([fetchRequestsData, fetchPolylineData])
+        // handle fetchRequestsData Promise
+        fetchRequestsData()
             .then(() => {
-                dispatch(triggerPolylineFetch());
                 dispatch(triggerRequestsDataFetch());
                 setTimeout(() => {
                     dispatch(switchReqLoadingStatus(false));
-                    dispatch(switchPolyLoadingStatus(false));
                 }, 2000);
             })
-            .catch((error: any) => {
-                console.error('error:', error);
-                // dispatch(setPolyError());
-                // dispatch(setReqError())
-            });
+            .catch((error: any) =>
+                console.error(
+                    'Error of fetchRequestsData promise:',
+                    error.message
+                )
+            );
     }, []);
+
+    useEffect(() => {
+        // define coods empty status
+        const isRoutesDataHasCoords = currentRoutesData
+            .map(item => item.coords)
+            .some(obj => obj.lat !== 0 || obj.lng !== 0);
+
+        isRoutesDataHasCoords
+            ? dispatch(setCoordsDataEmptyStatus(false))
+            : dispatch(setCoordsDataEmptyStatus(true));
+    }, [currentRoutesData]);
+
+    useEffect(() => {
+        // handle fetchPolylineData Promise
+        if (!isCoordsDataEmpty) {
+            console.log('fetchPolylineData');
+
+            const args = {
+                lng_start: currentRoutesData[0].coords.lng,
+                lat_start: currentRoutesData[0].coords.lat,
+                lng_end: currentRoutesData[1].coords.lng,
+                lat_end: currentRoutesData[1].coords.lat
+            };
+
+            fetchPolylineData({ ...args })
+                .then(() => dispatch(triggerPolylineFetch()))
+                .catch((error: any) =>
+                    console.error(
+                        'Error of fetchPolylineData promise:',
+                        error.message
+                    )
+                );
+        }
+    }, [currentRoutesData, isCoordsDataEmpty]);
 
     useEffect(() => {
         // generate Menu items elements
@@ -109,7 +139,6 @@ const App: React.FC = () => {
                 >
                     <Menu
                         theme="dark"
-                        defaultSelectedKeys={['1']}
                         mode="inline"
                         disabled={!isValidCondition}
                         items={[
@@ -127,7 +156,11 @@ const App: React.FC = () => {
                     <Content
                         style={{ display: 'flex', flexDirection: 'column' }}
                     >
-                        <Row style={{ padding: '10px' }}>
+                        <Row
+                            style={{
+                                padding: '10px'
+                            }}
+                        >
                             <ul
                                 style={{
                                     width: '100%',
@@ -143,10 +176,11 @@ const App: React.FC = () => {
                                                 margin: '5px'
                                             }}
                                         >
-                                            {route.role === 'start'
+                                            {/* {route.role === 'start'
                                                 ? 'Start'
-                                                : 'End'}
-                                            : <b>lat: {route.coords.lat}</b>
+                                                : 'End'} */}
+                                            <span>{route.label}</span>:{' '}
+                                            <b>lat: {route.coords.lat}</b>
                                             {' / '}
                                             <b>lng: {route.coords.lng}</b>
                                         </li>
@@ -175,10 +209,7 @@ const App: React.FC = () => {
                                     </>
                                     <MapContainer
                                         className="map-container"
-                                        center={[
-                                            currentRoutesData[0].coords.lat,
-                                            currentRoutesData[0].coords.lng
-                                        ]}
+                                        center={[10, 10]}
                                         zoom={8}
                                         scrollWheelZoom={true}
                                         placeholder={<MapPlaceholder />}

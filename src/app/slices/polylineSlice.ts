@@ -12,7 +12,7 @@ interface IpolylineSlice {
 
 const initialState: IpolylineSlice = {
     polylineData: null,
-    isPolylineDataLoading: true,
+    isPolylineDataLoading: false,
     polylineFetchError: null
 };
 

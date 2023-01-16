@@ -13,8 +13,8 @@ const initialState: IrequestSlice = {
             role: 'start',
             label: 'Start Location Name',
             coords: {
-                lat: 59.84660399,
-                lng: 30.29496392
+                lat: 0,
+                lng: 0
             }
         },
         {
@@ -22,13 +22,14 @@ const initialState: IrequestSlice = {
             role: 'end',
             label: 'End Location Name',
             coords: {
-                lat: 59.82934196,
-                lng: 30.42423701
+                lat: 0,
+                lng: 0
             }
         }
     ],
     isRequestsDataLoading: true,
-    requestsFetchError: null
+    requestsFetchError: null,
+    isCoordsDataEmpty: true
 };
 
 // /. state
@@ -67,6 +68,9 @@ const requestSlice = createSlice({
                 targetEndRoute.coords.lng = targetAPIRoute.coords.lng_end;
             }
         },
+        setCoordsDataEmptyStatus(state, action: PayloadAction<boolean>) {
+            state.isCoordsDataEmpty = action.payload;
+        },
         triggerRequestsDataFetch() {
             return;
         }
@@ -78,7 +82,8 @@ export const {
     switchReqLoadingStatus,
     setReqError,
     setCurrentRouteCoords,
-    triggerRequestsDataFetch
+    triggerRequestsDataFetch,
+    setCoordsDataEmptyStatus
 } = requestSlice.actions;
 
 export default requestSlice.reducer;

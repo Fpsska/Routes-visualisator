@@ -23,4 +23,5 @@ export interface IrequestSlice {
     currentRoutesData: IcurrentRoute[];
     isRequestsDataLoading: boolean;
     requestsFetchError: null | string;
+    isCoordsDataEmpty: boolean;
 }
