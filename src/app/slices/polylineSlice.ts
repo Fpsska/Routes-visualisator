@@ -26,8 +26,23 @@ const polylineSlice = createSlice({
             state.isPolylineDataLoading = action.payload;
         },
         setPolylineData(state, action: PayloadAction<any>) {
-            state.polylineData = action.payload;
-            console.log(action.payload);
+            const { waypoints } = action.payload;
+            // /. payload
+
+            const extendedWaypointsData = waypoints.map(
+                (obj: any, idx: number) => {
+                    return {
+                        ...obj,
+                        role: `${idx === 0 ? 'Start' : 'End'} Location Name`
+                    };
+                }
+            );
+
+            const updatedPolilyneData = {
+                ...action.payload,
+                waypoints: extendedWaypointsData
+            };
+            state.polylineData = updatedPolilyneData;
         },
         setPolyError(state, action: PayloadAction<null | string>) {
             state.polylineFetchError = action.payload;

@@ -18,8 +18,6 @@ import './map.scss';
 // /. imports
 
 const Map: React.FC = () => {
-    const { currentRoutesData, isCoordsDataEmpty, isRequestsDataLoading } =
-        useAppSelector(state => state.requestSlice);
     const { polylineData, isPolylineDataLoading } = useAppSelector(
         state => state.polylineSlice
     );
@@ -31,28 +29,29 @@ const Map: React.FC = () => {
     // /. hooks
 
     useEffect(() => {
-        // follow to new position
-        if (!isCoordsDataEmpty) {
-            console.log('FLY LOGIC');
-            const COORDS: [number, number] = [
-                currentRoutesData[0].coords.lat,
-                currentRoutesData[0].coords.lng
-            ];
-            const ZOOM = 14;
-            map.flyTo(COORDS, ZOOM, {
-                duration: 2
-            });
+        if (!polylineData) {
+            return;
         }
-    }, [currentRoutesData, isCoordsDataEmpty]);
 
-    useEffect(() => {
-        // transform getted OSRM API data to latlng-format
-        if (polylineData) {
-            const encodedLine = polylineData.routes[0].geometry;
-            const waypointsData = polyline.decode(encodedLine);
-            // display polyline only after is polylineData is loaded
-            setPolylineCoords(waypointsData);
-        }
+        const { waypoints, routes } = polylineData;
+
+        // follow to new position
+
+        // received: waypoints.location: [lng, lat]
+        const COORDS: [number, number] = [
+            waypoints[0].location[1], // lat
+            waypoints[0].location[0] // lng
+        ];
+        const ZOOM = 14;
+
+        map.flyTo(COORDS, ZOOM, {
+            duration: 2
+        });
+
+        // transform getted OSRM API data to polyline position format
+        const encodedLine = routes[0].geometry;
+        const waypointsData = polyline.decode(encodedLine);
+        setPolylineCoords(waypointsData);
     }, [polylineData]);
 
     // /. effects
@@ -61,35 +60,41 @@ const Map: React.FC = () => {
         <>
             <TileLayer
                 attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-                url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
+                url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             <>
-                {!isCoordsDataEmpty && (
+                {polylineData && (
                     <>
                         <>
-                            {currentRoutesData.map((route: IcurrentRoute) => {
+                            {polylineData.waypoints.map((waypoint: any) => {
                                 return (
                                     <Marker
-                                        key={route.id}
+                                        key={waypoint.hint}
                                         position={[
-                                            route.coords.lat,
-                                            route.coords.lng
+                                            // lat , lng
+                                            waypoint.location[1],
+                                            waypoint.location[0]
                                         ]}
                                         icon={getCustomMarker(
-                                            route.role === 'start'
+                                            waypoint.role.match('Start')
                                                 ? 'blue'
                                                 : 'green'
                                         )}
                                     >
                                         <Popup>
                                             <ul>
-                                                <li>Location: {route.label}</li>
                                                 <li>
-                                                    latitude: {route.coords.lat}
+                                                    Location:{' '}
+                                                    {waypoint.name ||
+                                                        waypoint.role}
+                                                </li>
+                                                <li>
+                                                    latitude:{' '}
+                                                    {waypoint.location[1]}
                                                 </li>
                                                 <li>
                                                     longitude:{' '}
-                                                    {route.coords.lng}
+                                                    {waypoint.location[0]}
                                                 </li>
                                             </ul>
                                         </Popup>
@@ -98,9 +103,7 @@ const Map: React.FC = () => {
                             })}
                         </>
                         <>
-                            {!isRequestsDataLoading && (
-                                <Polyline positions={polylineCoords} />
-                            )}{' '}
+                            <Polyline positions={polylineCoords} />
                         </>
                     </>
                 )}

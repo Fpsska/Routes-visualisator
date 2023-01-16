@@ -154,7 +154,10 @@ const App: React.FC = () => {
                 </Sider>
                 <Layout className="site-layout">
                     <Content
-                        style={{ display: 'flex', flexDirection: 'column' }}
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column'
+                        }}
                     >
                         <Row
                             style={{
@@ -168,24 +171,31 @@ const App: React.FC = () => {
                                     justifyContent: 'center'
                                 }}
                             >
-                                {currentRoutesData.map(route => {
-                                    return (
-                                        <li
-                                            key={route.id}
-                                            style={{
-                                                margin: '5px'
-                                            }}
-                                        >
-                                            {/* {route.role === 'start'
-                                                ? 'Start'
-                                                : 'End'} */}
-                                            <span>{route.label}</span>:{' '}
-                                            <b>lat: {route.coords.lat}</b>
-                                            {' / '}
-                                            <b>lng: {route.coords.lng}</b>
-                                        </li>
-                                    );
-                                })}
+                                {polylineData?.waypoints.map(
+                                    (waypoint: any) => {
+                                        return (
+                                            <li
+                                                key={waypoint.hint}
+                                                style={{
+                                                    margin: '5px'
+                                                }}
+                                            >
+                                                <span>
+                                                    {waypoint.name ||
+                                                        waypoint.role}
+                                                </span>
+                                                :{' '}
+                                                <b>
+                                                    lat: {waypoint.location[1]}
+                                                </b>
+                                                {' / '}
+                                                <b>
+                                                    lng: {waypoint.location[0]}
+                                                </b>
+                                            </li>
+                                        );
+                                    }
+                                )}
                             </ul>
                         </Row>
                         <Row
@@ -210,7 +220,7 @@ const App: React.FC = () => {
                                     <MapContainer
                                         className="map-container"
                                         center={[10, 10]}
-                                        zoom={8}
+                                        zoom={4}
                                         scrollWheelZoom={true}
                                         placeholder={<MapPlaceholder />}
                                     >
