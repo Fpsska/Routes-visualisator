@@ -27,6 +27,8 @@ import Preloader from '../Preloader/Preloader';
 import { fetchRequestsData } from '../../app/api/fetchRequestsData';
 import { fetchPolylineData } from '../../app/api/fetchPolylineData';
 
+import { useWidthHandler } from '../../hooks/useWidthHandler';
+
 const { Content, Footer, Sider } = Layout;
 
 import './App.css';
@@ -52,6 +54,8 @@ const App: React.FC = () => {
     } = theme.useToken();
 
     const dispatch = useAppDispatch();
+
+    const { isAllowableRes } = useWidthHandler(1300);
 
     // /. hooks
 
@@ -127,13 +131,18 @@ const App: React.FC = () => {
         setMenuItems(requestTemplates);
     }, [isRequestsDataLoading, requests]);
 
+    useEffect(() => {
+        // handle menu collapsed condition
+        !isAllowableRes && setCollapsed(true);
+    }, [isAllowableRes]);
+
     // /. effects
 
     return (
         <div className="App">
             <Layout style={{ minHeight: '100vh' }}>
                 <Sider
-                    collapsible
+                    collapsible={isAllowableRes}
                     collapsed={collapsed}
                     onCollapse={value => setCollapsed(value)}
                 >
