@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import {
-    TileLayer,
-    Marker,
-    Popup,
-    Polyline,
-    useMap,
-    useMapEvents
-} from 'react-leaflet';
+import { TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
 
 import polyline from '@mapbox/polyline';
 
@@ -23,9 +16,7 @@ import './map.scss';
 // /. imports
 
 const Map: React.FC = () => {
-    const { polylineData, isPolylineDataLoading } = useAppSelector(
-        state => state.polylineSlice
-    );
+    const { polylineData } = useAppSelector(state => state.polylineSlice);
 
     const [polylineCoords, setPolylineCoords] = useState<any[]>([]);
     const map = useMap();
@@ -103,9 +94,7 @@ const Map: React.FC = () => {
                                 );
                             })}
                         </>
-                        <>
-                            <Polyline positions={polylineCoords} />
-                        </>
+                        <Polyline positions={polylineCoords} />
                     </>
                 )}
             </>

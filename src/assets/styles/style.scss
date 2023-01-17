@@ -11,3 +11,17 @@ body {
     height: 100%;
     overflow: hidden;
 }
+
+.information-dashboard {
+    z-index: 500;
+    background-color: rgba($color: #fff, $alpha: .95);
+    position: absolute;
+    top: -100%;
+    left: 0;
+    transition: all 1s ease-in-out;
+    width: 100%;
+}
+
+.information-dashboard.visible {
+    top: 0;
+}

@@ -4,7 +4,6 @@ import { createSlice, PayloadAction, current } from '@reduxjs/toolkit';
 
 interface IpolylineSlice {
     polylineData: any;
-    isPolylineDataLoading: boolean;
     polylineFetchError: null | string;
 }
 
@@ -12,7 +11,6 @@ interface IpolylineSlice {
 
 const initialState: IpolylineSlice = {
     polylineData: null,
-    isPolylineDataLoading: false,
     polylineFetchError: null
 };
 
@@ -22,9 +20,6 @@ const polylineSlice = createSlice({
     name: 'polylineSlice',
     initialState,
     reducers: {
-        switchPolyLoadingStatus(state, action: PayloadAction<boolean>) {
-            state.isPolylineDataLoading = action.payload;
-        },
         setPolylineData(state, action: PayloadAction<any>) {
             const { waypoints } = action.payload;
             // /. payload
@@ -46,7 +41,6 @@ const polylineSlice = createSlice({
         },
         setPolyError(state, action: PayloadAction<null | string>) {
             state.polylineFetchError = action.payload;
-            state.isPolylineDataLoading = false;
         },
         triggerPolylineFetch() {
             return;
@@ -54,11 +48,7 @@ const polylineSlice = createSlice({
     }
 });
 
-export const {
-    switchPolyLoadingStatus,
-    setPolylineData,
-    setPolyError,
-    triggerPolylineFetch
-} = polylineSlice.actions;
+export const { setPolylineData, setPolyError, triggerPolylineFetch } =
+    polylineSlice.actions;
 
 export default polylineSlice.reducer;

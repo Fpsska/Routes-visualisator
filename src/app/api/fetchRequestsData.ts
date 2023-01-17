@@ -10,6 +10,6 @@ export async function fetchRequestsData(): Promise<any> {
 
         return await response.json();
     } catch (err: any) {
-        console.error('Error of my-json-server:', err.message);
+        throw new Error(err.message);
     }
 }

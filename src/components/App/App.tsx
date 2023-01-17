@@ -23,6 +23,7 @@ import {
 import Map from '../Map/Map';
 import MapPlaceholder from '../Map/MapPlaceholder';
 import Preloader from '../Preloader/Preloader';
+import Error from '../Error/Error';
 
 import { fetchRequestsData } from '../../app/api/fetchRequestsData';
 import { fetchPolylineData } from '../../app/api/fetchPolylineData';
@@ -41,10 +42,13 @@ const App: React.FC = () => {
     const {
         isRequestsDataLoading,
         requests,
+        requestsFetchError,
         currentRoutesData,
         isCoordsDataEmpty
     } = useAppSelector(state => state.requestSlice);
-    const { polylineData } = useAppSelector(state => state.polylineSlice);
+    const { polylineData, polylineFetchError } = useAppSelector(
+        state => state.polylineSlice
+    );
 
     const [collapsed, setCollapsed] = useState(false);
     const [menuItems, setMenuItems] = useState<any>([]);
@@ -59,7 +63,14 @@ const App: React.FC = () => {
 
     // /. hooks
 
-    const isValidCondition = !isRequestsDataLoading && requests;
+    const isValidCondition =
+        !isRequestsDataLoading &&
+        requests &&
+        !requestsFetchError &&
+        !polylineFetchError;
+
+    const isDashboardEmpty =
+        !polylineData && !requestsFetchError && !polylineFetchError;
 
     // /. variables
 
@@ -78,12 +89,14 @@ const App: React.FC = () => {
                     dispatch(switchReqLoadingStatus(false));
                 }, 2000);
             })
-            .catch((error: any) =>
-                console.error(
-                    'Error of fetchRequestsData promise:',
-                    error.message
-                )
-            );
+            .catch(({ message }) => {
+                console.error('Error of fetchRequestsData promise:', message);
+                dispatch(
+                    setReqError(
+                        `Error of fetchRequestsData promise: ${message}`
+                    )
+                );
+            });
     }, []);
 
     useEffect(() => {
@@ -100,8 +113,6 @@ const App: React.FC = () => {
     useEffect(() => {
         // handle fetchPolylineData Promise
         if (!isCoordsDataEmpty) {
-            console.log('fetchPolylineData');
-
             const args = {
                 lng_start: currentRoutesData[0].coords.lng,
                 lat_start: currentRoutesData[0].coords.lat,
@@ -111,12 +122,17 @@ const App: React.FC = () => {
 
             fetchPolylineData({ ...args })
                 .then(() => dispatch(triggerPolylineFetch()))
-                .catch((error: any) =>
+                .catch(({ message }) => {
                     console.error(
                         'Error of fetchPolylineData promise:',
-                        error.message
-                    )
-                );
+                        message
+                    );
+                    dispatch(
+                        setPolyError(
+                            `Error of fetchPolylineData promise: ${message}`
+                        )
+                    );
+                });
         }
     }, [currentRoutesData, isCoordsDataEmpty]);
 
@@ -165,14 +181,28 @@ const App: React.FC = () => {
                     <Content
                         style={{
                             display: 'flex',
-                            flexDirection: 'column'
+                            flexDirection: 'column',
+                            position: 'relative'
                         }}
                     >
                         <Row
-                            style={{
-                                padding: '10px'
-                            }}
+                            className={
+                                isDashboardEmpty
+                                    ? 'information-dashboard'
+                                    : 'information-dashboard visible'
+                            }
                         >
+                            <>
+                                {requestsFetchError && (
+                                    <Error
+                                        message={requestsFetchError}
+                                        delay={1500}
+                                    />
+                                )}
+                                {polylineFetchError && (
+                                    <Error message={polylineFetchError} />
+                                )}
+                            </>
                             <ul
                                 style={{
                                     width: '100%',

@@ -18,8 +18,3 @@ export function* fetchRequestsWatcher(): any {
     // watching for AC of slice
     yield takeEvery(triggerRequestsDataFetch.type, fetchRequestsWorker);
 }
-
-// export function* rootSaga(): any {
-//     // run watchers
-//     yield fetchRequestsWatcher();
-// }
