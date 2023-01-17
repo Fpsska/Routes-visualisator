@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
 
-import { TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
+import {
+    TileLayer,
+    Marker,
+    Popup,
+    Polyline,
+    useMap,
+    useMapEvents
+} from 'react-leaflet';
 
 import polyline from '@mapbox/polyline';
 
 import { useAppSelector } from '../../app/hooks';
-
-import { IcurrentRoute } from '../../Types/requestSliceTypes';
 
 import { getCustomMarker } from '../../helpers/getCustomMarker';
 
@@ -23,13 +28,12 @@ const Map: React.FC = () => {
     );
 
     const [polylineCoords, setPolylineCoords] = useState<any[]>([]);
-
     const map = useMap();
 
     // /. hooks
 
     useEffect(() => {
-        if (!polylineData) {
+        if (!polylineData || !map) {
             return;
         }
 
@@ -38,15 +42,12 @@ const Map: React.FC = () => {
         // follow to new position
 
         // received: waypoints.location: [lng, lat]
-        const COORDS: [number, number] = [
-            waypoints[0].location[1], // lat
-            waypoints[0].location[0] // lng
+        const COORDS: [number, number][] = [
+            [waypoints[0].location[1], waypoints[0].location[0]], // lat, lng
+            [waypoints[1].location[1], waypoints[1].location[0]]
         ];
-        const ZOOM = 14;
 
-        map.flyTo(COORDS, ZOOM, {
-            duration: 2
-        });
+        map.fitBounds(COORDS, { maxZoom: 14, animate: true, duration: 2 });
 
         // transform getted OSRM API data to polyline position format
         const encodedLine = routes[0].geometry;
