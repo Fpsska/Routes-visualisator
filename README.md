@@ -2,6 +2,17 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) TS template.
 
+###### _powered by :_
+
+- [Ant Design](https://ant.design/)
+- [Leaflet](https://leafletjs.com/)
+- [React-Leaflet](https://react-leaflet.js.org/)
+- [OSRM API](http://project-osrm.org/)
+- [TypiCode API](https://my-json-server.typicode.com/)
+
+
+### `Watch demo` _[ILS-Task](https://fpsska.github.io/ILS-Task/)_
+
 ## Available Scripts
 
 In the project directory, you can run:
