@@ -34,9 +34,9 @@ const Sidebar: React.FC<propTypes> = ({ isValidCondition }) => {
 
     // /. hooks
 
-    const onMenuItemClick = (e: any): void => {
-        dispatch(setCurrentRouteCoords({ id: +e.key }));
-    };
+    // const onMenuItemClick = (e: any): void => {
+    //     dispatch(setCurrentRouteCoords({ id: +e.key }));
+    // };
 
     // /. functions
 
@@ -65,6 +65,7 @@ const Sidebar: React.FC<propTypes> = ({ isValidCondition }) => {
             onCollapse={value => setCollapsed(value)}
             width={'40%'}
         >
+            <Table />
             {/* <Menu
                 theme="dark"
                 mode="inline"
@@ -79,7 +80,6 @@ const Sidebar: React.FC<propTypes> = ({ isValidCondition }) => {
                 ]}
                 onClick={e => onMenuItemClick(e)}
             /> */}
-            <Table />
         </Sider>
     );
 };

@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import { Table as AntdTable } from 'antd';
 
-import { useAppSelector } from '../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
+
+import { setCurrentRouteCoords } from '../../app/slices/requestSlice';
 
 import type { ColumnsType } from 'antd/es/table';
 
@@ -31,8 +33,18 @@ const Table: React.FC = () => {
     const [tableData, setTableData] = useState<DataType[]>([]);
     const [isTableDataLoading, setTableDataLoadingStatus] =
         useState<boolean>(true);
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+
+    const dispatch = useAppDispatch();
 
     // /. hooks
+
+    const onSelectChange = (key: number): void => {
+        setSelectedRowKeys([key]);
+        dispatch(setCurrentRouteCoords({ id: key }));
+    };
+
+    // /. functions
 
     const columns: ColumnsType<DataType> = [
         {
@@ -63,7 +75,16 @@ const Table: React.FC = () => {
         }
     ];
 
+    const rowSelection: TableRowSelection<DataType> = {
+        selectedRowKeys,
+        onSelect: record => onSelectChange(record.requestNumber),
+        type: 'radio'
+    };
+
     // /. variables
+
+    // fix filling tableData[] by dublicated elements
+    useEffect(() => setTableData([]), []);
 
     useEffect(() => {
         // /. update tableData
@@ -88,6 +109,10 @@ const Table: React.FC = () => {
         }
     }, [requests, isRequestsDataLoading]);
 
+    useEffect(() => {
+        console.log(selectedRowKeys);
+    }, [selectedRowKeys]);
+
     // /. effect
 
     return (
@@ -95,9 +120,15 @@ const Table: React.FC = () => {
             columns={columns}
             pagination={false}
             loading={isTableDataLoading}
+            rowSelection={rowSelection}
             dataSource={tableData}
             scroll={{ x: '100%', y: 'calc(100vh - 50px)' }}
             style={{ height: '100%' }}
+            onRow={record => {
+                return {
+                    onClick: () => onSelectChange(record.requestNumber)
+                };
+            }}
         />
     );
 };

@@ -43,3 +43,9 @@
 .ant-spin {
     min-height: 100%;
 }
+
+.ant-table-row {
+    &:hover {
+        cursor: pointer;
+    }
+}
