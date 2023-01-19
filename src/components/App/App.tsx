@@ -21,6 +21,7 @@ import {
 import Map from '../Map/Map';
 import MapPlaceholder from '../Map/MapPlaceholder';
 import Sidebar from '../Sidebar/Sidebar';
+import Table from '../Table/Table';
 import Preloader from '../Preloader/Preloader';
 import Error from '../Error/Error';
 

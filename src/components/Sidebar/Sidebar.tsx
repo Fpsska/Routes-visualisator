@@ -4,6 +4,8 @@ import { CopyOutlined } from '@ant-design/icons';
 
 import { Layout, Menu } from 'antd';
 
+import Table from '../Table/Table';
+
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 
 import { setCurrentRouteCoords } from '../../app/slices/requestSlice';
@@ -61,8 +63,9 @@ const Sidebar: React.FC<propTypes> = ({ isValidCondition }) => {
             collapsible={isAllowableRes}
             collapsed={collapsed}
             onCollapse={value => setCollapsed(value)}
+            width={'40%'}
         >
-            <Menu
+            {/* <Menu
                 theme="dark"
                 mode="inline"
                 disabled={!isValidCondition}
@@ -75,7 +78,8 @@ const Sidebar: React.FC<propTypes> = ({ isValidCondition }) => {
                     }
                 ]}
                 onClick={e => onMenuItemClick(e)}
-            />
+            /> */}
+            <Table />
         </Sider>
     );
 };

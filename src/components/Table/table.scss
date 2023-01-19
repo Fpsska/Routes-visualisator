@@ -1,0 +1,45 @@
+.ant-table-wrapper .ant-table {
+    border-radius: 0 0 0 0;
+}
+
+.ant-table-wrapper .ant-table {
+    height: 100%;
+
+    table {
+        height: 100%;
+    }
+}
+
+.ant-table-wrapper .ant-table.ant-table-empty .ant-table-body {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+.ant-table-wrapper .ant-table .ant-table-container .ant-table-body {
+    &::-webkit-scrollbar {
+        height: 8px;
+        width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(#333, .2);
+        border: 3px solid transparent;
+        border-radius: 4px;
+    }
+}
+
+.ant-spin-nested-loading,
+.ant-spin-container,
+.ant-table-container,
+.ant-table-tbody {
+    height: 100%;
+}
+
+.ant-spin {
+    min-height: 100%;
+}
