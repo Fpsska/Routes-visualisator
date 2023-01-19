@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
-import { CopyOutlined } from '@ant-design/icons';
 import { MapContainer } from 'react-leaflet';
 
-import { Layout, Menu, theme, Row, Col } from 'antd';
+import { Layout, theme, Row, Col } from 'antd';
 
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 
 import {
     switchReqLoadingStatus,
     setReqError,
-    setCurrentRouteCoords,
     triggerRequestsDataFetch,
     setCoordsDataEmptyStatus
 } from '../../app/slices/requestSlice';
@@ -22,15 +20,14 @@ import {
 
 import Map from '../Map/Map';
 import MapPlaceholder from '../Map/MapPlaceholder';
+import Sidebar from '../Sidebar/Sidebar';
 import Preloader from '../Preloader/Preloader';
 import Error from '../Error/Error';
 
 import { fetchRequestsData } from '../../app/api/fetchRequestsData';
 import { fetchPolylineData } from '../../app/api/fetchPolylineData';
 
-import { useWidthHandler } from '../../hooks/useWidthHandler';
-
-const { Content, Footer, Sider } = Layout;
+const { Content, Footer } = Layout;
 
 import './App.css';
 import '../../assets/styles/_reset.scss';
@@ -50,16 +47,11 @@ const App: React.FC = () => {
         state => state.polylineSlice
     );
 
-    const [collapsed, setCollapsed] = useState(false);
-    const [menuItems, setMenuItems] = useState<any>([]);
-
     const {
         token: { colorBgContainer }
     } = theme.useToken();
 
     const dispatch = useAppDispatch();
-
-    const { isAllowableRes } = useWidthHandler(1300);
 
     // /. hooks
 
@@ -73,12 +65,6 @@ const App: React.FC = () => {
         !polylineData && !requestsFetchError && !polylineFetchError;
 
     // /. variables
-
-    const onMenuItemClick = (e: any): void => {
-        dispatch(setCurrentRouteCoords({ id: +e.key }));
-    };
-
-    // /. functions
 
     useEffect(() => {
         // handle fetchRequestsData Promise
@@ -136,48 +122,13 @@ const App: React.FC = () => {
         }
     }, [currentRoutesData, isCoordsDataEmpty]);
 
-    useEffect(() => {
-        // generate Menu items elements
-        const requestTemplates = requests.map(template => {
-            return {
-                label: `request №${template.id}`,
-                key: template.id
-            };
-        });
-        setMenuItems(requestTemplates);
-    }, [isRequestsDataLoading, requests]);
-
-    useEffect(() => {
-        // handle menu collapsed condition
-        !isAllowableRes && setCollapsed(true);
-    }, [isAllowableRes]);
-
     // /. effects
 
     return (
         <div className="App">
             <Layout style={{ minHeight: '100vh' }}>
-                <Sider
-                    collapsible={isAllowableRes}
-                    collapsed={collapsed}
-                    onCollapse={value => setCollapsed(value)}
-                >
-                    <Menu
-                        theme="dark"
-                        mode="inline"
-                        disabled={!isValidCondition}
-                        items={[
-                            {
-                                label: 'Requests',
-                                key: 'menu-1',
-                                icon: <CopyOutlined />,
-                                children: menuItems
-                            }
-                        ]}
-                        onClick={e => onMenuItemClick(e)}
-                    />
-                </Sider>
                 <Layout className="site-layout">
+                    <Sidebar isValidCondition={isValidCondition} />
                     <Content
                         style={{
                             display: 'flex',
