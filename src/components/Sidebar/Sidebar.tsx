@@ -8,7 +8,10 @@ import Table from '../Table/Table';
 
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 
-import { setCurrentRouteCoords } from '../../app/slices/requestSlice';
+import {
+    setCurrentRouteCoords,
+    setCurrentRequestKey
+} from '../../app/slices/requestSlice';
 
 import { useWidthHandler } from '../../hooks/useWidthHandler';
 
@@ -19,11 +22,10 @@ interface propTypes {
 }
 
 const Sidebar: React.FC<propTypes> = ({ isValidCondition }) => {
-    const { requests, isRequestsDataLoading } = useAppSelector(
-        state => state.requestSlice
-    );
+    const { requests, currentRequestKey, isRequestsDataLoading } =
+        useAppSelector(state => state.requestSlice);
 
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState(true);
     const [menuItems, setMenuItems] = useState<any>([]);
 
     const { Sider } = Layout;
@@ -34,9 +36,13 @@ const Sidebar: React.FC<propTypes> = ({ isValidCondition }) => {
 
     // /. hooks
 
-    // const onMenuItemClick = (e: any): void => {
-    //     dispatch(setCurrentRouteCoords({ id: +e.key }));
-    // };
+    const onMenuItemClick = (e: any): void => {
+        // console.log(e);
+        dispatch(setCurrentRouteCoords({ id: +e.key }));
+        dispatch(setCurrentRequestKey([e.key]));
+        // setSelectedMenuKey([+e.key]);
+        setCollapsed(false);
+    };
 
     // /. functions
 
@@ -65,21 +71,25 @@ const Sidebar: React.FC<propTypes> = ({ isValidCondition }) => {
             onCollapse={value => setCollapsed(value)}
             width={'40%'}
         >
-            <Table />
-            {/* <Menu
-                theme="dark"
-                mode="inline"
-                disabled={!isValidCondition}
-                items={[
-                    {
-                        label: 'Requests',
-                        key: 'menu-1',
-                        icon: <CopyOutlined />,
-                        children: menuItems
-                    }
-                ]}
-                onClick={e => onMenuItemClick(e)}
-            /> */}
+            {collapsed ? (
+                <Menu
+                    theme="dark"
+                    mode="inline"
+                    // disabled={!isValidCondition}
+                    items={[
+                        {
+                            label: 'Requests',
+                            key: 'menu-1',
+                            icon: <CopyOutlined />,
+                            children: menuItems
+                        }
+                    ]}
+                    selectedKeys={currentRequestKey}
+                    onClick={e => onMenuItemClick(e)}
+                />
+            ) : (
+                <Table />
+            )}
         </Sider>
     );
 };

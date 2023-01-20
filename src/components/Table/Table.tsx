@@ -1,10 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Table as AntdTable } from 'antd';
 
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 
-import { setCurrentRouteCoords } from '../../app/slices/requestSlice';
+import {
+    setCurrentRouteCoords,
+    setCurrentRequestKey
+} from '../../app/slices/requestSlice';
 
 import type { ColumnsType } from 'antd/es/table';
 
@@ -26,22 +29,20 @@ interface DataType {
 // /. interfaces
 
 const Table: React.FC = () => {
-    const { requests, isRequestsDataLoading } = useAppSelector(
-        state => state.requestSlice
-    );
+    const { requests, currentRequestKey, isRequestsDataLoading } =
+        useAppSelector(state => state.requestSlice);
 
     const [tableData, setTableData] = useState<DataType[]>([]);
     const [isTableDataLoading, setTableDataLoadingStatus] =
         useState<boolean>(true);
-    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
     const dispatch = useAppDispatch();
 
     // /. hooks
 
     const onSelectChange = (key: number): void => {
-        setSelectedRowKeys([key]);
         dispatch(setCurrentRouteCoords({ id: key }));
+        dispatch(setCurrentRequestKey([String(key)]));
     };
 
     // /. functions
@@ -76,7 +77,7 @@ const Table: React.FC = () => {
     ];
 
     const rowSelection: TableRowSelection<DataType> = {
-        selectedRowKeys,
+        selectedRowKeys: currentRequestKey.map(item => +item),
         onSelect: record => onSelectChange(record.requestNumber),
         type: 'radio'
     };
@@ -108,10 +109,6 @@ const Table: React.FC = () => {
             setTableDataLoadingStatus(false);
         }
     }, [requests, isRequestsDataLoading]);
-
-    useEffect(() => {
-        console.log(selectedRowKeys);
-    }, [selectedRowKeys]);
 
     // /. effect
 

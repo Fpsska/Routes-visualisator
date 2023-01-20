@@ -27,6 +27,7 @@ const initialState: IrequestSlice = {
             }
         }
     ],
+    currentRequestKey: [],
     isRequestsDataLoading: true,
     requestsFetchError: null,
     isCoordsDataEmpty: true
@@ -68,6 +69,9 @@ const requestSlice = createSlice({
                 targetEndRoute.coords.lng = targetAPIRoute.coords.lng_end;
             }
         },
+        setCurrentRequestKey(state, action: PayloadAction<string[]>) {
+            state.currentRequestKey = action.payload;
+        },
         setCoordsDataEmptyStatus(state, action: PayloadAction<boolean>) {
             state.isCoordsDataEmpty = action.payload;
         },
@@ -83,7 +87,8 @@ export const {
     setReqError,
     setCurrentRouteCoords,
     triggerRequestsDataFetch,
-    setCoordsDataEmptyStatus
+    setCoordsDataEmptyStatus,
+    setCurrentRequestKey
 } = requestSlice.actions;
 
 export default requestSlice.reducer;
