@@ -31,7 +31,7 @@ interface DataType {
 
 // /. interfaces
 
-const Table: React.FC<any> = ({ isAllowableRes }) => {
+const Table: React.FC = () => {
     const {
         requests,
         currentRequestKey,
@@ -59,6 +59,7 @@ const Table: React.FC<any> = ({ isAllowableRes }) => {
         }
 
         setTimeout(() => {
+            // wait for render ant-table-header
             const tableHeader =
                 tableRef.current.childNodes[0].childNodes[0].childNodes[0]
                     .childNodes[0].childNodes[0];
@@ -66,7 +67,7 @@ const Table: React.FC<any> = ({ isAllowableRes }) => {
             const { height } = getPropertiesOfHTMLel(tableHeader);
             setTableHeaderHeight(height);
         }, 100);
-    }, [isTableDataLoading]);
+    }, [tableRef, isTableDataLoading]);
 
     // /. functions
 
@@ -76,31 +77,31 @@ const Table: React.FC<any> = ({ isAllowableRes }) => {
             dataIndex: 'requestNumber',
             sorter: (a, b) => a.requestNumber - b.requestNumber,
             align: 'center',
-            width: '10px'
+            width: '10%'
         },
         {
-            title: 'Latitudsdfsdfdsfe (start)',
+            title: 'Latitude (start)',
             dataIndex: 'latitudeStart',
             align: 'center',
-            width: '10px'
+            width: '10%'
         },
         {
             title: 'Longitude (start)',
             dataIndex: 'longitudeStart',
             align: 'center',
-            width: '10px'
+            width: '10%'
         },
         {
             title: 'Latitude (finish)',
             dataIndex: 'latitudeEnd',
             align: 'center',
-            width: '10px'
+            width: '10%'
         },
         {
             title: 'Longitude (finish)',
             dataIndex: 'longitudeEnd',
             align: 'center',
-            width: '10px'
+            width: '10%'
         }
     ];
 
@@ -145,9 +146,8 @@ const Table: React.FC<any> = ({ isAllowableRes }) => {
         }
 
         setTimeout(() => {
-            // setTableDataLoadingStatus(false);
             dispatch(switchTableDataLoadingStatus(false));
-        }, 6000);
+        }, 2000);
     }, [requests, isRequestsDataLoading]);
 
     // useEffect(() => {
@@ -181,7 +181,6 @@ const Table: React.FC<any> = ({ isAllowableRes }) => {
                 y: `calc(100vh - ${tableHeaderHeight}px - 48px)`
             }}
             style={{ height: '100%' }}
-            tableLayout="fixed"
             size="small"
             onRow={record => {
                 return {

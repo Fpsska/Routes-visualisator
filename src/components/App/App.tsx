@@ -213,6 +213,7 @@ const App: React.FC = () => {
                                         zoom={4}
                                         scrollWheelZoom={true}
                                         placeholder={<MapPlaceholder />}
+                                        zoomControl={false}
                                     >
                                         <Map />
                                     </MapContainer>

@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from 'react';
 
-import { TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
+import {
+    TileLayer,
+    Marker,
+    Popup,
+    Polyline,
+    useMap,
+    ZoomControl
+} from 'react-leaflet';
 
 import polyline from '@mapbox/polyline';
 
 import { useAppSelector } from '../../app/hooks';
 
 import { getCustomMarker } from '../../helpers/getCustomMarker';
+
+import { useWidthHandler } from '../../hooks/useWidthHandler';
 
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility';
@@ -19,7 +28,9 @@ const Map: React.FC = () => {
     const { polylineData } = useAppSelector(state => state.polylineSlice);
 
     const [polylineCoords, setPolylineCoords] = useState<any[]>([]);
+
     const map = useMap();
+    const [isMobileRes] = useWidthHandler(600);
 
     // /. hooks
 
@@ -54,6 +65,7 @@ const Map: React.FC = () => {
                 attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
                 url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
+            <ZoomControl position={isMobileRes ? 'bottomleft' : 'topleft'} />
             <>
                 {polylineData && (
                     <>

@@ -2,9 +2,7 @@ import { useState, useEffect } from 'react';
 
 // /. imports
 
-export function useWidthHandler(breakpoint: number): {
-    isAllowableRes: boolean;
-} {
+export function useWidthHandler(breakpoint: number): boolean[] {
     const [width, setWidth] = useState<number>(window.innerWidth);
     const [isAllowableRes, setAllowableRes] = useState<boolean>(false);
 
@@ -18,8 +16,8 @@ export function useWidthHandler(breakpoint: number): {
     }, []);
 
     useEffect(() => {
-        setAllowableRes(width > breakpoint);
+        setAllowableRes(width <= breakpoint);
     }, [width, breakpoint]);
 
-    return { isAllowableRes };
+    return [isAllowableRes];
 }
