@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { CopyOutlined } from '@ant-design/icons';
 import { Menu as AntdMenu } from 'antd';
 
+import { MenuMode } from 'rc-menu/lib/interface';
+
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 
 import {
@@ -13,16 +15,16 @@ import {
 // /. imports
 
 interface propTypes {
+    orientation: MenuMode;
     isValidCondition: boolean;
-    setCollapsedStatus: (arg: boolean) => void;
+    setCollapsedStatus?: (arg: boolean) => void;
 }
 
 // /. interfaces
 
-const Menu: React.FC<propTypes> = ({
-    isValidCondition,
-    setCollapsedStatus
-}) => {
+const Menu: React.FC<propTypes> = props => {
+    const { orientation, isValidCondition, setCollapsedStatus } = props;
+
     const {
         requests,
         currentRequestKey,
@@ -39,7 +41,7 @@ const Menu: React.FC<propTypes> = ({
     const onMenuItemClick = (e: any): void => {
         dispatch(setCurrentRouteCoords({ id: +e.key }));
         dispatch(setCurrentRequestKey([e.key]));
-        setCollapsedStatus(false);
+        setCollapsedStatus && setCollapsedStatus(false);
     };
 
     // /. functions
@@ -60,7 +62,7 @@ const Menu: React.FC<propTypes> = ({
     return (
         <AntdMenu
             theme="dark"
-            mode="inline"
+            mode={orientation}
             disabled={!isValidCondition || isTableDataLoading}
             items={[
                 {

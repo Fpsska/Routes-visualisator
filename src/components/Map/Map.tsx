@@ -30,7 +30,7 @@ const Map: React.FC = () => {
     const [polylineCoords, setPolylineCoords] = useState<any[]>([]);
 
     const map = useMap();
-    const [isMobileRes] = useWidthHandler(600);
+    const [isMobileRes] = useWidthHandler(768);
 
     // /. hooks
 

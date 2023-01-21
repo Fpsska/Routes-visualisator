@@ -12,6 +12,10 @@ body {
     overflow: hidden;
 }
 
+.leaflet-control-zoom.leaflet-bar.leaflet-control {
+    margin-top: 35px;
+}
+
 .information-dashboard {
     z-index: 500;
     background-color: rgba($color: #fff, $alpha: .95);
@@ -24,4 +28,36 @@ body {
 
 .information-dashboard.visible {
     top: 0;
+}
+
+.list {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+
+    &__template {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 5px;
+        width: 100%;
+        justify-content: center;
+    }
+
+    &__name {
+        margin-right: 5px;
+    }
+
+    &__coords {
+
+        b {
+            &:not(:last-child) {
+                margin-right: 5px;
+            }
+        }
+
+        @media screen and (max-width: 450px) {
+            display: flex;
+            flex-direction: column;
+        }
+    }
 }

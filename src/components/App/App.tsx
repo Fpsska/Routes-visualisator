@@ -21,11 +21,14 @@ import {
 import Map from '../Map/Map';
 import MapPlaceholder from '../Map/MapPlaceholder';
 import Sidebar from '../Sidebar/Sidebar';
+import Menu from '../Menu/Menu';
 import Preloader from '../Preloader/Preloader';
 import Error from '../Error/Error';
 
 import { fetchRequestsData } from '../../app/api/fetchRequestsData';
 import { fetchPolylineData } from '../../app/api/fetchPolylineData';
+
+import { useWidthHandler } from '../../hooks/useWidthHandler';
 
 const { Content, Footer } = Layout;
 
@@ -50,6 +53,7 @@ const App: React.FC = () => {
     const {
         token: { colorBgContainer }
     } = theme.useToken();
+    const [isMobileRes] = useWidthHandler(768);
 
     const dispatch = useAppDispatch();
 
@@ -128,7 +132,15 @@ const App: React.FC = () => {
         <div className="App">
             <Layout style={{ minHeight: '100vh' }}>
                 <Layout className="site-layout">
-                    <Sidebar isValidCondition={isValidCondition} />
+                    {isMobileRes ? (
+                        <Menu
+                            orientation={'horizontal'}
+                            isValidCondition={isValidCondition}
+                        />
+                    ) : (
+                        <Sidebar isValidCondition={isValidCondition} />
+                    )}
+                    {/* sidebar section */}
                     <Content
                         style={{
                             display: 'flex',
@@ -154,34 +166,29 @@ const App: React.FC = () => {
                                     <Error message={polylineFetchError} />
                                 )}
                             </>
-                            <ul
-                                style={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    justifyContent: 'center'
-                                }}
-                            >
+                            <ul className="information-dashboard__list list">
                                 {polylineData?.waypoints.map(
                                     (waypoint: any) => {
                                         return (
                                             <li
+                                                className="list__template"
                                                 key={waypoint.hint}
-                                                style={{
-                                                    margin: '5px'
-                                                }}
                                             >
-                                                <span>
+                                                <span className="list__name">
                                                     {waypoint.name ||
                                                         waypoint.role}
+                                                    :
                                                 </span>
-                                                :{' '}
-                                                <b>
-                                                    lat: {waypoint.location[1]}
-                                                </b>
-                                                {' / '}
-                                                <b>
-                                                    lng: {waypoint.location[0]}
-                                                </b>
+                                                <span className="list__coords">
+                                                    <b>
+                                                        lat:{' '}
+                                                        {waypoint.location[1]}
+                                                    </b>
+                                                    <b>
+                                                        lng:{' '}
+                                                        {waypoint.location[0]}
+                                                    </b>
+                                                </span>
                                             </li>
                                         );
                                     }
@@ -220,6 +227,7 @@ const App: React.FC = () => {
                                 </div>
                             </Col>
                         </Row>
+                        {/* /. map section */}
                     </Content>
                     <Footer style={{ padding: 0 }}></Footer>
                 </Layout>
