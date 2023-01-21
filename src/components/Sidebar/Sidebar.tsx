@@ -25,23 +25,21 @@ const Sidebar: React.FC<propTypes> = ({ isValidCondition }) => {
     const { requests, currentRequestKey, isRequestsDataLoading } =
         useAppSelector(state => state.requestSlice);
 
-    const [collapsed, setCollapsed] = useState(true);
+    const [isCollapsed, setCollapsedStatus] = useState(true);
     const [menuItems, setMenuItems] = useState<any>([]);
 
     const { Sider } = Layout;
 
-    const { isAllowableRes } = useWidthHandler(1300);
+    const { isAllowableRes } = useWidthHandler(1320);
 
     const dispatch = useAppDispatch();
 
     // /. hooks
 
     const onMenuItemClick = (e: any): void => {
-        // console.log(e);
         dispatch(setCurrentRouteCoords({ id: +e.key }));
         dispatch(setCurrentRequestKey([e.key]));
-        // setSelectedMenuKey([+e.key]);
-        setCollapsed(false);
+        setCollapsedStatus(false);
     };
 
     // /. functions
@@ -59,19 +57,19 @@ const Sidebar: React.FC<propTypes> = ({ isValidCondition }) => {
 
     useEffect(() => {
         // handle menu collapsed condition
-        !isAllowableRes && setCollapsed(true);
+        // !isAllowableRes && setCollapsed(true);
     }, [isAllowableRes]);
 
     // /. effects
 
     return (
         <Sider
-            collapsible={isAllowableRes}
-            collapsed={collapsed}
-            onCollapse={value => setCollapsed(value)}
+            collapsible={true}
+            collapsed={isCollapsed}
+            onCollapse={value => setCollapsedStatus(value)}
             width={'40%'}
         >
-            {collapsed ? (
+            {isCollapsed ? (
                 <Menu
                     theme="dark"
                     mode="inline"
@@ -88,7 +86,7 @@ const Sidebar: React.FC<propTypes> = ({ isValidCondition }) => {
                     onClick={e => onMenuItemClick(e)}
                 />
             ) : (
-                <Table />
+                <Table isAllowableRes={isAllowableRes} />
             )}
         </Sider>
     );

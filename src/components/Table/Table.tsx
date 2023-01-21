@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 import { Table as AntdTable } from 'antd';
 
@@ -8,6 +8,8 @@ import {
     setCurrentRouteCoords,
     setCurrentRequestKey
 } from '../../app/slices/requestSlice';
+
+import { getPropertiesOfHTMLel } from '../../helpers/getPropertyOfHtmlEl';
 
 import type { ColumnsType } from 'antd/es/table';
 
@@ -28,7 +30,7 @@ interface DataType {
 
 // /. interfaces
 
-const Table: React.FC = () => {
+const Table: React.FC<any> = ({ isAllowableRes }) => {
     const { requests, currentRequestKey, isRequestsDataLoading } =
         useAppSelector(state => state.requestSlice);
 
@@ -36,14 +38,32 @@ const Table: React.FC = () => {
     const [isTableDataLoading, setTableDataLoadingStatus] =
         useState<boolean>(true);
 
+    const [tableHeaderHeight, setTableHeaderHeight] = useState<number>(0);
+
     const dispatch = useAppDispatch();
+    const tableRef = useRef<HTMLDivElement>(null!);
 
     // /. hooks
 
     const onSelectChange = (key: number): void => {
-        dispatch(setCurrentRouteCoords({ id: key }));
-        dispatch(setCurrentRequestKey([String(key)]));
+        // dispatch(setCurrentRouteCoords({ id: key }));
+        // dispatch(setCurrentRequestKey([String(key)]));
     };
+
+    const getTableHeaderHeight = useCallback((): void => {
+        if (!tableRef || isTableDataLoading) {
+            return;
+        }
+
+        setTimeout(() => {
+            const tableHeader =
+                tableRef.current.childNodes[0].childNodes[0].childNodes[0]
+                    .childNodes[0].childNodes[0];
+
+            const { height } = getPropertiesOfHTMLel(tableHeader);
+            setTableHeaderHeight(height);
+        }, 100);
+    }, [isTableDataLoading]);
 
     // /. functions
 
@@ -52,34 +72,40 @@ const Table: React.FC = () => {
             title: '№ request',
             dataIndex: 'requestNumber',
             sorter: (a, b) => a.requestNumber - b.requestNumber,
-            align: 'center'
+            align: 'center',
+            width: '10px'
         },
         {
-            title: 'Latitude (start)',
+            title: 'Latitudsdfsdfdsfe (start)',
             dataIndex: 'latitudeStart',
-            align: 'center'
+            align: 'center',
+            width: '10px'
         },
         {
             title: 'Longitude (start)',
             dataIndex: 'longitudeStart',
-            align: 'center'
+            align: 'center',
+            width: '10px'
         },
         {
             title: 'Latitude (finish)',
             dataIndex: 'latitudeEnd',
-            align: 'center'
+            align: 'center',
+            width: '10px'
         },
         {
             title: 'Longitude (finish)',
             dataIndex: 'longitudeEnd',
-            align: 'center'
+            align: 'center',
+            width: '10px'
         }
     ];
 
     const rowSelection: TableRowSelection<DataType> = {
         selectedRowKeys: currentRequestKey.map(item => +item),
         onSelect: record => onSelectChange(record.requestNumber),
-        type: 'radio'
+        type: 'radio',
+        columnWidth: 0 // fix ant-table-selection-column large width
     };
 
     // /. variables
@@ -89,38 +115,68 @@ const Table: React.FC = () => {
 
     useEffect(() => {
         // /. update tableData
-        if (requests && !isRequestsDataLoading) {
-            for (let i = 0; i < requests.length; i++) {
-                const request = requests[i];
-
-                setTableData(prevArr => [
-                    ...prevArr,
-                    {
-                        key: request.id,
-                        requestNumber: request.id,
-                        latitudeStart: request.coords.lat_start,
-                        longitudeStart: request.coords.lng_start,
-                        latitudeEnd: request.coords.lat_end,
-                        longitudeEnd: request.coords.lng_end
-                    }
-                ]);
-            }
-
-            setTableDataLoadingStatus(false);
+        if (!requests || isRequestsDataLoading) {
+            return;
         }
+
+        for (let i = 0; i < 10; i++) {
+            // const request = requests[i];
+
+            setTableData(prevArr => [
+                ...prevArr,
+                {
+                    // key: request.id,
+                    // requestNumber: request.id,
+                    // latitudeStart: request.coords.lat_start,
+                    // longitudeStart: request.coords.lng_start,
+                    // latitudeEnd: request.coords.lat_end,
+                    // longitudeEnd: request.coords.lng_end
+                    key: i + 1,
+                    requestNumber: i + 1,
+                    latitudeStart: i + 1,
+                    longitudeStart: i + 1,
+                    latitudeEnd: i + 1,
+                    longitudeEnd: i + 1
+                }
+            ]);
+        }
+
+        setTableDataLoadingStatus(false);
     }, [requests, isRequestsDataLoading]);
+
+    // useEffect(() => {
+    //     !isAllowableRes && setXScroll('100vw');
+    //     console.log('triggered');
+    // }, [isAllowableRes]);
+
+    useEffect(() => {
+        // get height of ant-table-header value by init render
+        getTableHeaderHeight();
+
+        // get height of ant-table-header by window resize
+        window.addEventListener('resize', getTableHeaderHeight);
+        return () => {
+            window.removeEventListener('resize', getTableHeaderHeight);
+        };
+    }, [getTableHeaderHeight]);
 
     // /. effect
 
     return (
         <AntdTable
+            ref={tableRef}
             columns={columns}
             pagination={false}
             loading={isTableDataLoading}
             rowSelection={rowSelection}
             dataSource={tableData}
-            scroll={{ x: '100%', y: 'calc(100vh - 50px)' }}
+            scroll={{
+                x: '100vw',
+                y: `calc(100vh - ${tableHeaderHeight}px - 48px)`
+            }}
             style={{ height: '100%' }}
+            tableLayout="fixed"
+            size="small"
             onRow={record => {
                 return {
                     onClick: () => onSelectChange(record.requestNumber)
