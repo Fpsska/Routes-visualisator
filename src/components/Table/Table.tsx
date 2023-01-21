@@ -147,7 +147,7 @@ const Table: React.FC = () => {
 
         setTimeout(() => {
             dispatch(switchTableDataLoadingStatus(false));
-        }, 2000);
+        }, 1300);
     }, [requests, isRequestsDataLoading]);
 
     // useEffect(() => {

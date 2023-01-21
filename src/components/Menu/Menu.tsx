@@ -15,6 +15,7 @@ import {
 // /. imports
 
 interface propTypes {
+    role: string;
     orientation: MenuMode;
     isValidCondition: boolean;
     setCollapsedStatus?: (arg: boolean) => void;
@@ -23,7 +24,7 @@ interface propTypes {
 // /. interfaces
 
 const Menu: React.FC<propTypes> = props => {
-    const { orientation, isValidCondition, setCollapsedStatus } = props;
+    const { role, orientation, isValidCondition, setCollapsedStatus } = props;
 
     const {
         requests,
@@ -37,6 +38,13 @@ const Menu: React.FC<propTypes> = props => {
     const dispatch = useAppDispatch();
 
     // /. hooks
+
+    const isMenuDisabled =
+        role === 'mobile'
+            ? !isValidCondition
+            : !isValidCondition || isTableDataLoading;
+
+    // /. variables
 
     const onMenuItemClick = (e: any): void => {
         dispatch(setCurrentRouteCoords({ id: +e.key }));
@@ -63,7 +71,7 @@ const Menu: React.FC<propTypes> = props => {
         <AntdMenu
             theme="dark"
             mode={orientation}
-            disabled={!isValidCondition || isTableDataLoading}
+            disabled={isMenuDisabled}
             items={[
                 {
                     label: 'Requests',

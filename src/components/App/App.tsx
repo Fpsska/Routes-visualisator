@@ -134,6 +134,7 @@ const App: React.FC = () => {
                 <Layout className="site-layout">
                     {isMobileRes ? (
                         <Menu
+                            role={'mobile'}
                             orientation={'horizontal'}
                             isValidCondition={isValidCondition}
                         />

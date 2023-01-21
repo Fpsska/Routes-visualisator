@@ -35,9 +35,10 @@ const Sidebar: React.FC<propTypes> = ({ isValidCondition }) => {
         >
             {isCollapsed ? (
                 <Menu
+                    role={'desktop'}
+                    orientation={'inline'}
                     isValidCondition={isValidCondition}
                     setCollapsedStatus={setCollapsedStatus}
-                    orientation={'inline'}
                 />
             ) : (
                 <Table />
