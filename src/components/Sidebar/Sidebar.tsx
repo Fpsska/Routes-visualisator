@@ -22,8 +22,12 @@ interface propTypes {
 }
 
 const Sidebar: React.FC<propTypes> = ({ isValidCondition }) => {
-    const { requests, currentRequestKey, isRequestsDataLoading } =
-        useAppSelector(state => state.requestSlice);
+    const {
+        requests,
+        currentRequestKey,
+        isRequestsDataLoading,
+        isTableDataLoading
+    } = useAppSelector(state => state.requestSlice);
 
     const [isCollapsed, setCollapsedStatus] = useState(true);
     const [menuItems, setMenuItems] = useState<any>([]);
@@ -73,7 +77,7 @@ const Sidebar: React.FC<propTypes> = ({ isValidCondition }) => {
                 <Menu
                     theme="dark"
                     mode="inline"
-                    // disabled={!isValidCondition}
+                    disabled={!isValidCondition || isTableDataLoading}
                     items={[
                         {
                             label: 'Requests',

@@ -6,7 +6,8 @@ import { useAppSelector, useAppDispatch } from '../../app/hooks';
 
 import {
     setCurrentRouteCoords,
-    setCurrentRequestKey
+    setCurrentRequestKey,
+    switchTableDataLoadingStatus
 } from '../../app/slices/requestSlice';
 
 import { getPropertiesOfHTMLel } from '../../helpers/getPropertyOfHtmlEl';
@@ -31,12 +32,14 @@ interface DataType {
 // /. interfaces
 
 const Table: React.FC<any> = ({ isAllowableRes }) => {
-    const { requests, currentRequestKey, isRequestsDataLoading } =
-        useAppSelector(state => state.requestSlice);
+    const {
+        requests,
+        currentRequestKey,
+        isRequestsDataLoading,
+        isTableDataLoading
+    } = useAppSelector(state => state.requestSlice);
 
     const [tableData, setTableData] = useState<DataType[]>([]);
-    const [isTableDataLoading, setTableDataLoadingStatus] =
-        useState<boolean>(true);
 
     const [tableHeaderHeight, setTableHeaderHeight] = useState<number>(0);
 
@@ -119,7 +122,7 @@ const Table: React.FC<any> = ({ isAllowableRes }) => {
             return;
         }
 
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 30; i++) {
             // const request = requests[i];
 
             setTableData(prevArr => [
@@ -141,7 +144,10 @@ const Table: React.FC<any> = ({ isAllowableRes }) => {
             ]);
         }
 
-        setTableDataLoadingStatus(false);
+        setTimeout(() => {
+            // setTableDataLoadingStatus(false);
+            dispatch(switchTableDataLoadingStatus(false));
+        }, 6000);
     }, [requests, isRequestsDataLoading]);
 
     // useEffect(() => {

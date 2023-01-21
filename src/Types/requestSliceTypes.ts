@@ -25,4 +25,5 @@ export interface IrequestSlice {
     requestsFetchError: null | string;
     isCoordsDataEmpty: boolean;
     currentRequestKey: string[]; // antd Menu comp accept only string[] for selectedKeys[]
+    isTableDataLoading: boolean;
 }

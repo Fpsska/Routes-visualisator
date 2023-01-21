@@ -30,7 +30,8 @@ const initialState: IrequestSlice = {
     currentRequestKey: [],
     isRequestsDataLoading: true,
     requestsFetchError: null,
-    isCoordsDataEmpty: true
+    isCoordsDataEmpty: true,
+    isTableDataLoading: true
 };
 
 // /. state
@@ -75,6 +76,9 @@ const requestSlice = createSlice({
         setCoordsDataEmptyStatus(state, action: PayloadAction<boolean>) {
             state.isCoordsDataEmpty = action.payload;
         },
+        switchTableDataLoadingStatus(state, action: PayloadAction<boolean>) {
+            state.isTableDataLoading = action.payload;
+        },
         triggerRequestsDataFetch() {
             return;
         }
@@ -88,7 +92,8 @@ export const {
     setCurrentRouteCoords,
     triggerRequestsDataFetch,
     setCoordsDataEmptyStatus,
-    setCurrentRequestKey
+    setCurrentRequestKey,
+    switchTableDataLoadingStatus
 } = requestSlice.actions;
 
 export default requestSlice.reducer;
