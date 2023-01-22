@@ -11,7 +11,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - [TypiCode API](https://my-json-server.typicode.com/)
 
 
-### `Watch demo` _[ILS-Task](https://fpsska.github.io/ILS-Task/)_
+### `Watch demo` _[ILS-Logistics-Task](https://fpsska.github.io/ILS-Logistics-Task/)_
 
 ## Available Scripts
 
