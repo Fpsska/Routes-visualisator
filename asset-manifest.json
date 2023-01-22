@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/ILS-Task/static/css/main.a48f2fb0.css",
-    "main.js": "/ILS-Task/static/js/main.4170bfd5.js",
-    "static/js/787.675da6dc.chunk.js": "/ILS-Task/static/js/787.675da6dc.chunk.js",
-    "index.html": "/ILS-Task/index.html",
-    "main.a48f2fb0.css.map": "/ILS-Task/static/css/main.a48f2fb0.css.map",
-    "main.4170bfd5.js.map": "/ILS-Task/static/js/main.4170bfd5.js.map",
-    "787.675da6dc.chunk.js.map": "/ILS-Task/static/js/787.675da6dc.chunk.js.map"
+    "main.css": "/ILS-Logistics-Task/static/css/main.a48f2fb0.css",
+    "main.js": "/ILS-Logistics-Task/static/js/main.a846acba.js",
+    "static/js/787.779cc9da.chunk.js": "/ILS-Logistics-Task/static/js/787.779cc9da.chunk.js",
+    "index.html": "/ILS-Logistics-Task/index.html",
+    "main.a48f2fb0.css.map": "/ILS-Logistics-Task/static/css/main.a48f2fb0.css.map",
+    "main.a846acba.js.map": "/ILS-Logistics-Task/static/js/main.a846acba.js.map",
+    "787.779cc9da.chunk.js.map": "/ILS-Logistics-Task/static/js/787.779cc9da.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.a48f2fb0.css",
-    "static/js/main.4170bfd5.js"
+    "static/js/main.a846acba.js"
   ]
 }
