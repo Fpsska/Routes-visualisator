@@ -49,7 +49,7 @@ const Map: React.FC = () => {
             [waypoints[1].location[1], waypoints[1].location[0]]
         ];
 
-        map.fitBounds(COORDS, { maxZoom: 14, animate: true, duration: 2 });
+        map.fitBounds(COORDS, { maxZoom: 12, animate: true, duration: 2 });
 
         // transform getted OSRM API data to polyline position format
         const encodedLine = routes[0].geometry;
@@ -62,8 +62,8 @@ const Map: React.FC = () => {
     return (
         <>
             <TileLayer
-                attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-                url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution={String(process.env.REACT_APP_MAP_ATTRIBUTION)}
+                url={String(process.env.REACT_APP_MAP_URL)}
             />
             <ZoomControl position={isMobileRes ? 'bottomleft' : 'topleft'} />
             <>

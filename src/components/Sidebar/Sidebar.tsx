@@ -23,6 +23,20 @@ const Sidebar: React.FC<propTypes> = ({ isValidCondition }) => {
 
     // /. hooks
 
+    useEffect(() => {
+        // handle isCollapsed by keydown event
+        const keyHandler = (e: KeyboardEvent): void => {
+            if (!isCollapsed && e.code === 'Escape') {
+                setCollapsedStatus(true);
+            }
+        };
+
+        document.addEventListener('keydown', keyHandler);
+        return () => {
+            document.removeEventListener('keydown', keyHandler);
+        };
+    }, [isCollapsed]);
+
     // /. effects
 
     return (
