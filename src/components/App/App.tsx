@@ -151,7 +151,7 @@ const App: React.FC = () => {
                     >
                         <Row
                             className={
-                                isDashboardEmpty
+                                isDashboardEmpty || !isMobileRes
                                     ? 'information-dashboard'
                                     : 'information-dashboard visible'
                             }

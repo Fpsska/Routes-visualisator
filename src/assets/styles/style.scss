@@ -12,9 +12,10 @@ body {
     overflow: hidden;
 }
 
-.leaflet-control-zoom.leaflet-bar.leaflet-control {
-    margin-top: 35px;
+.leaflet-bottom.leaflet-left .leaflet-control-zoom.leaflet-bar.leaflet-control {
+    margin-bottom: 35px;
 }
+
 
 .information-dashboard {
     z-index: 500;
