@@ -1,9 +1,9 @@
 {
-  "name": "ils-task",
+  "name": "ils-logistics-task",
   "author": "Fpsska",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://Fpsska.github.io/ILS-Task",
+  "homepage": "https://Fpsska.github.io/ILS-Logistics-Task",
   "dependencies": {
     "@mapbox/polyline": "^1.1.1",
     "@reduxjs/toolkit": "^1.9.1",
