@@ -12,12 +12,25 @@
 
 .ant-table-wrapper .ant-table.ant-table-empty .ant-table-body {
     position: absolute;
-    left: 0;
-    bottom: 0;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     overflow: visible !important;
+
+    .ant-table-placeholder .ant-table-cell {
+        border-bottom: 0;
+    }
 }
 
 .ant-table-wrapper .ant-table .ant-table-container .ant-table-body {
+
+    &:hover {
+        &::-webkit-scrollbar-thumb:horizontal {
+            background-color: rgba(#333, .2);
+            transition: all .35s linear;
+        }
+    }
+
     &::-webkit-scrollbar {
         height: 8px;
         width: 8px;
@@ -27,8 +40,14 @@
         background: transparent;
     }
 
-    &::-webkit-scrollbar-thumb {
+    &::-webkit-scrollbar-thumb:vertical {
         background-color: rgba(#333, .2);
+        border: 3px solid transparent;
+        border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb:horizontal {
+        background-color: transparent;
         border: 3px solid transparent;
         border-radius: 4px;
     }
@@ -49,9 +68,4 @@
     &:hover {
         cursor: pointer;
     }
-}
-
-.ant-table-cell.ant-table-selection-column {
-    // background-color: red;
-    // max-width: 10px;
 }

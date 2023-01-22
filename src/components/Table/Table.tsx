@@ -49,8 +49,8 @@ const Table: React.FC = () => {
     // /. hooks
 
     const onSelectChange = (key: number): void => {
-        // dispatch(setCurrentRouteCoords({ id: key }));
-        // dispatch(setCurrentRequestKey([String(key)]));
+        dispatch(setCurrentRouteCoords({ id: key }));
+        dispatch(setCurrentRequestKey([String(key)]));
     };
 
     const getTableHeaderHeight = useCallback((): void => {
@@ -77,39 +77,38 @@ const Table: React.FC = () => {
             dataIndex: 'requestNumber',
             sorter: (a, b) => a.requestNumber - b.requestNumber,
             align: 'center',
-            width: '10%'
+            width: 120
         },
         {
             title: 'Latitude (start)',
             dataIndex: 'latitudeStart',
             align: 'center',
-            width: '10%'
+            width: 150
         },
         {
             title: 'Longitude (start)',
             dataIndex: 'longitudeStart',
             align: 'center',
-            width: '10%'
+            width: 150
         },
         {
             title: 'Latitude (finish)',
             dataIndex: 'latitudeEnd',
             align: 'center',
-            width: '10%'
+            width: 150
         },
         {
             title: 'Longitude (finish)',
             dataIndex: 'longitudeEnd',
             align: 'center',
-            width: '10%'
+            width: 150
         }
     ];
 
     const rowSelection: TableRowSelection<DataType> = {
         selectedRowKeys: currentRequestKey.map(item => +item),
         onSelect: record => onSelectChange(record.requestNumber),
-        type: 'radio',
-        columnWidth: 0 // fix ant-table-selection-column large width
+        type: 'radio'
     };
 
     // /. variables
@@ -123,24 +122,18 @@ const Table: React.FC = () => {
             return;
         }
 
-        for (let i = 0; i < 30; i++) {
-            // const request = requests[i];
+        for (let i = 0; i < requests.length; i++) {
+            const request = requests[i];
 
             setTableData(prevArr => [
                 ...prevArr,
                 {
-                    // key: request.id,
-                    // requestNumber: request.id,
-                    // latitudeStart: request.coords.lat_start,
-                    // longitudeStart: request.coords.lng_start,
-                    // latitudeEnd: request.coords.lat_end,
-                    // longitudeEnd: request.coords.lng_end
-                    key: i + 1,
-                    requestNumber: i + 1,
-                    latitudeStart: i + 1,
-                    longitudeStart: i + 1,
-                    latitudeEnd: i + 1,
-                    longitudeEnd: i + 1
+                    key: request.id,
+                    requestNumber: request.id,
+                    latitudeStart: request.coords.lat_start,
+                    longitudeStart: request.coords.lng_start,
+                    latitudeEnd: request.coords.lat_end,
+                    longitudeEnd: request.coords.lng_end
                 }
             ]);
         }
@@ -171,13 +164,13 @@ const Table: React.FC = () => {
     return (
         <AntdTable
             ref={tableRef}
-            columns={columns}
+            columns={!isTableDataLoading && requests ? columns : []}
             pagination={false}
             loading={isTableDataLoading}
             rowSelection={rowSelection}
-            dataSource={tableData}
+            dataSource={!isTableDataLoading && requests ? tableData : []}
             scroll={{
-                x: '100vw',
+                x: 'max-content',
                 y: `calc(100vh - ${tableHeaderHeight}px - 48px)`
             }}
             style={{ height: '100%' }}
