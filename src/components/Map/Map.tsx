@@ -6,7 +6,8 @@ import {
     Popup,
     Polyline,
     useMap,
-    ZoomControl
+    ZoomControl,
+    FeatureGroup
 } from 'react-leaflet';
 
 import polyline from '@mapbox/polyline';
@@ -49,13 +50,18 @@ const Map: React.FC = () => {
             [waypoints[1].location[1], waypoints[1].location[0]]
         ];
 
-        map.fitBounds(COORDS, { maxZoom: 12, animate: true, duration: 2 });
+        map.flyToBounds(COORDS, {
+            maxZoom: map.getBoundsZoom(COORDS),
+            animate: true,
+            duration: 1,
+            padding: [90, 90]
+        });
 
         // transform getted OSRM API data to polyline position format
         const encodedLine = routes[0].geometry;
         const waypointsData = polyline.decode(encodedLine);
         setPolylineCoords(waypointsData);
-    }, [polylineData]);
+    }, [polylineData, map]);
 
     // /. effects
 
@@ -66,7 +72,7 @@ const Map: React.FC = () => {
                 url={String(process.env.REACT_APP_MAP_URL)}
             />
             <ZoomControl position={isMobileRes ? 'bottomleft' : 'topleft'} />
-            <>
+            <FeatureGroup>
                 {polylineData && (
                     <>
                         <>
@@ -109,7 +115,7 @@ const Map: React.FC = () => {
                         <Polyline positions={polylineCoords} />
                     </>
                 )}
-            </>
+            </FeatureGroup>
         </>
     );
 };

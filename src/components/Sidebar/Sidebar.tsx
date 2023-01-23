@@ -44,7 +44,7 @@ const Sidebar: React.FC<propTypes> = ({ isValidCondition }) => {
             collapsible={true}
             collapsed={isCollapsed}
             onCollapse={value => setCollapsedStatus(value)}
-            width={isTabletRes ? '30%' : '40%'}
+            width={isTabletRes ? '28%' : '30%'}
             hidden={isMobileRes}
         >
             {isCollapsed ? (
