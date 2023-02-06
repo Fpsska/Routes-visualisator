@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/ILS-Logistics-Task/static/css/main.a48f2fb0.css",
-    "main.js": "/ILS-Logistics-Task/static/js/main.a846acba.js",
+    "main.js": "/ILS-Logistics-Task/static/js/main.f6768c99.js",
     "static/js/787.779cc9da.chunk.js": "/ILS-Logistics-Task/static/js/787.779cc9da.chunk.js",
     "index.html": "/ILS-Logistics-Task/index.html",
     "main.a48f2fb0.css.map": "/ILS-Logistics-Task/static/css/main.a48f2fb0.css.map",
-    "main.a846acba.js.map": "/ILS-Logistics-Task/static/js/main.a846acba.js.map",
+    "main.f6768c99.js.map": "/ILS-Logistics-Task/static/js/main.f6768c99.js.map",
     "787.779cc9da.chunk.js.map": "/ILS-Logistics-Task/static/js/787.779cc9da.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.a48f2fb0.css",
-    "static/js/main.a846acba.js"
+    "static/js/main.f6768c99.js"
   ]
 }
