@@ -48,7 +48,6 @@ const requestSlice = createSlice({
         },
         setReqError(state, action: PayloadAction<null | string>) {
             state.requestsFetchError = action.payload;
-            state.isRequestsDataLoading = false;
         },
         setCurrentRouteCoords(state, action: PayloadAction<{ id: number }>) {
             const { id } = action.payload;

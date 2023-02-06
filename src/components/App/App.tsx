@@ -66,8 +66,6 @@ const App: React.FC = () => {
         !requestsFetchError &&
         !polylineFetchError;
 
-    // && requests.length > 0
-
     const isDashboardEmpty =
         !polylineData && !requestsFetchError && !polylineFetchError;
 
@@ -77,6 +75,7 @@ const App: React.FC = () => {
         // handle fetchRequestsData Promise
         fetchRequestsData()
             .then(() => {
+                console.log('!!!');
                 dispatch(triggerRequestsDataFetch());
                 setTimeout(() => {
                     dispatch(switchReqLoadingStatus(false));
@@ -89,6 +88,9 @@ const App: React.FC = () => {
                         `Error of fetchRequestsData promise: ${message}`
                     )
                 );
+                setTimeout(() => {
+                    dispatch(switchReqLoadingStatus(false));
+                }, 2000);
             });
     }, []);
 
@@ -105,28 +107,28 @@ const App: React.FC = () => {
 
     useEffect(() => {
         // handle fetchPolylineData Promise
-        if (!isCoordsDataEmpty) {
-            const args = {
-                lng_start: currentRoutesData[0].coords.lng,
-                lat_start: currentRoutesData[0].coords.lat,
-                lng_end: currentRoutesData[1].coords.lng,
-                lat_end: currentRoutesData[1].coords.lat
-            };
-
-            fetchPolylineData({ ...args })
-                .then(() => dispatch(triggerPolylineFetch()))
-                .catch(({ message }) => {
-                    console.error(
-                        'Error of fetchPolylineData promise:',
-                        message
-                    );
-                    dispatch(
-                        setPolyError(
-                            `Error of fetchPolylineData promise: ${message}`
-                        )
-                    );
-                });
+        if (isCoordsDataEmpty) {
+            return;
         }
+
+        const args = {
+            lng_start: currentRoutesData[0].coords.lng,
+            lat_start: currentRoutesData[0].coords.lat,
+            lng_end: currentRoutesData[1].coords.lng,
+            lat_end: currentRoutesData[1].coords.lat
+        };
+
+        fetchPolylineData({ ...args })
+            .then(() => console.log('111'))
+            .then(() => dispatch(triggerPolylineFetch()))
+            .catch(({ message }) => {
+                console.error('Error of fetchPolylineData promise:', message);
+                dispatch(
+                    setPolyError(
+                        `Error of fetchPolylineData promise: ${message}`
+                    )
+                );
+            });
     }, [currentRoutesData, isCoordsDataEmpty]);
 
     // /. effects

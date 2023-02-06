@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 
-import { Table as AntdTable } from 'antd';
+import { Table as AntdTable, Empty } from 'antd';
 
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 
@@ -36,7 +36,8 @@ const Table: React.FC = () => {
         requests,
         currentRequestKey,
         isRequestsDataLoading,
-        isTableDataLoading
+        isTableDataLoading,
+        requestsFetchError
     } = useAppSelector(state => state.requestSlice);
 
     const [tableData, setTableData] = useState<DataType[]>([]);
@@ -47,6 +48,9 @@ const Table: React.FC = () => {
     const tableRef = useRef<HTMLDivElement>(null!);
 
     // /. hooks
+
+    const isRequestsDataEmpty = !requests || requests.length === 0;
+    const isDataLoading = isRequestsDataLoading || isTableDataLoading;
 
     const columns: ColumnsType<DataType> = [
         {
@@ -88,8 +92,13 @@ const Table: React.FC = () => {
         type: 'radio'
     };
 
-    const isRequestsDataEmpty = !requests || requests.length === 0;
-    const isDataLoading = isRequestsDataLoading || isTableDataLoading;
+    const dataPlaceholder: JSX.Element = (
+        <Empty
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            description={requestsFetchError}
+            style={{ color: 'red' }}
+        />
+    );
 
     // /. variables
 
@@ -144,11 +153,6 @@ const Table: React.FC = () => {
         }, 1300);
     }, [requests, isRequestsDataEmpty]);
 
-    // useEffect(() => {
-    //     !isAllowableRes && setXScroll('100vw');
-    //     console.log('triggered');
-    // }, [isAllowableRes]);
-
     useEffect(() => {
         // get height of ant-table-header value by init render
         getTableHeaderHeight();
@@ -167,6 +171,9 @@ const Table: React.FC = () => {
             ref={tableRef}
             columns={isRequestsDataEmpty || isDataLoading ? [] : columns}
             pagination={false}
+            locale={{
+                emptyText: dataPlaceholder
+            }}
             loading={isDataLoading}
             rowSelection={rowSelection}
             dataSource={isRequestsDataEmpty || isDataLoading ? [] : tableData}

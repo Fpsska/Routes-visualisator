@@ -10,7 +10,6 @@ import {
 
 function* fetchRequestsWorker(): any {
     // business logic
-
     const { requestsData } = yield call(fetchRequestsData);
     yield put(setRequestsData(requestsData));
 }
