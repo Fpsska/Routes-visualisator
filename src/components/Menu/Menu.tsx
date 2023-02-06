@@ -56,6 +56,10 @@ const Menu: React.FC<propTypes> = props => {
 
     useEffect(() => {
         // generate Menu items elements
+        if (!isValidCondition) {
+            return;
+        }
+
         const requestTemplates = requests.map(template => {
             return {
                 label: `request №${template.id}`,
@@ -63,7 +67,7 @@ const Menu: React.FC<propTypes> = props => {
             };
         });
         setMenuItems(requestTemplates);
-    }, [isRequestsDataLoading, requests]);
+    }, [requests, isValidCondition]);
 
     // /. effects
 

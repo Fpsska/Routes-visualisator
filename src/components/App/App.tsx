@@ -62,8 +62,11 @@ const App: React.FC = () => {
     const isValidCondition =
         !isRequestsDataLoading &&
         requests &&
+        requests.length > 0 &&
         !requestsFetchError &&
         !polylineFetchError;
+
+    // && requests.length > 0
 
     const isDashboardEmpty =
         !polylineData && !requestsFetchError && !polylineFetchError;
@@ -209,7 +212,7 @@ const App: React.FC = () => {
                             >
                                 <div className="map">
                                     <>
-                                        {!isValidCondition && (
+                                        {isRequestsDataLoading && (
                                             <div className="map__preloader">
                                                 <Preloader />
                                             </div>

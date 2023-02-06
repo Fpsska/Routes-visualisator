@@ -48,29 +48,6 @@ const Table: React.FC = () => {
 
     // /. hooks
 
-    const onSelectChange = (key: number): void => {
-        dispatch(setCurrentRouteCoords({ id: key }));
-        dispatch(setCurrentRequestKey([String(key)]));
-    };
-
-    const getTableHeaderHeight = useCallback((): void => {
-        if (!tableRef || isTableDataLoading) {
-            return;
-        }
-
-        setTimeout(() => {
-            // wait for render ant-table-header
-            const tableHeader =
-                tableRef.current.childNodes[0].childNodes[0].childNodes[0]
-                    .childNodes[0].childNodes[0];
-
-            const { height } = getPropertiesOfHTMLel(tableHeader);
-            setTableHeaderHeight(height);
-        }, 100);
-    }, [tableRef, isTableDataLoading]);
-
-    // /. functions
-
     const columns: ColumnsType<DataType> = [
         {
             title: '№ request',
@@ -111,37 +88,61 @@ const Table: React.FC = () => {
         type: 'radio'
     };
 
+    const isRequestsDataEmpty = !requests || requests.length === 0;
+    const isDataLoading = isRequestsDataLoading || isTableDataLoading;
+
     // /. variables
+
+    const onSelectChange = (key: number): void => {
+        dispatch(setCurrentRouteCoords({ id: key }));
+        dispatch(setCurrentRequestKey([String(key)]));
+    };
+
+    const getTableHeaderHeight = useCallback((): void => {
+        if (!tableRef || isRequestsDataEmpty) {
+            return;
+        }
+
+        setTimeout(() => {
+            // wait for render ant-table-header
+            const tableHeader =
+                tableRef.current.childNodes[0].childNodes[0].childNodes[0]
+                    .childNodes[0].childNodes[0];
+
+            const { height } = getPropertiesOfHTMLel(tableHeader);
+            setTableHeaderHeight(height);
+        }, 100);
+    }, [tableRef, isRequestsDataEmpty]);
+
+    // /. functions
 
     // fix filling tableData[] by dublicated elements
     useEffect(() => setTableData([]), []);
 
     useEffect(() => {
         // /. update tableData
-        if (!requests || isRequestsDataLoading) {
-            return;
-        }
+        if (!isRequestsDataEmpty) {
+            for (let i = 0; i < requests.length; i++) {
+                const request = requests[i];
 
-        for (let i = 0; i < requests.length; i++) {
-            const request = requests[i];
-
-            setTableData(prevArr => [
-                ...prevArr,
-                {
-                    key: request.id,
-                    requestNumber: request.id,
-                    latitudeStart: request.coords.lat_start,
-                    longitudeStart: request.coords.lng_start,
-                    latitudeEnd: request.coords.lat_end,
-                    longitudeEnd: request.coords.lng_end
-                }
-            ]);
+                setTableData(prevArr => [
+                    ...prevArr,
+                    {
+                        key: request.id,
+                        requestNumber: request.id,
+                        latitudeStart: request.coords.lat_start,
+                        longitudeStart: request.coords.lng_start,
+                        latitudeEnd: request.coords.lat_end,
+                        longitudeEnd: request.coords.lng_end
+                    }
+                ]);
+            }
         }
 
         setTimeout(() => {
             dispatch(switchTableDataLoadingStatus(false));
         }, 1300);
-    }, [requests, isRequestsDataLoading]);
+    }, [requests, isRequestsDataEmpty]);
 
     // useEffect(() => {
     //     !isAllowableRes && setXScroll('100vw');
@@ -164,11 +165,11 @@ const Table: React.FC = () => {
     return (
         <AntdTable
             ref={tableRef}
-            columns={!isTableDataLoading && requests ? columns : []}
+            columns={isRequestsDataEmpty || isDataLoading ? [] : columns}
             pagination={false}
-            loading={isTableDataLoading}
+            loading={isDataLoading}
             rowSelection={rowSelection}
-            dataSource={!isTableDataLoading && requests ? tableData : []}
+            dataSource={isRequestsDataEmpty || isDataLoading ? [] : tableData}
             scroll={{
                 x: 'max-content',
                 y: `calc(100vh - ${tableHeaderHeight}px - 48px)`
