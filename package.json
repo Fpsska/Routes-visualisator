@@ -1,9 +1,9 @@
 {
-  "name": "ils-logistics-task",
+  "name": "routes-visualisator",
   "author": "Fpsska",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://Fpsska.github.io/ILS-Logistics-Task",
+  "homepage": "https://Fpsska.github.io/Routes-visualisator",
   "dependencies": {
     "@mapbox/polyline": "^1.1.1",
     "@reduxjs/toolkit": "^1.9.1",
