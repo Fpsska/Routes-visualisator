@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/ILS-Logistics-Task/static/css/main.a48f2fb0.css",
-    "main.js": "/ILS-Logistics-Task/static/js/main.edf4ef90.js",
-    "static/js/787.779cc9da.chunk.js": "/ILS-Logistics-Task/static/js/787.779cc9da.chunk.js",
-    "index.html": "/ILS-Logistics-Task/index.html",
-    "main.a48f2fb0.css.map": "/ILS-Logistics-Task/static/css/main.a48f2fb0.css.map",
-    "main.edf4ef90.js.map": "/ILS-Logistics-Task/static/js/main.edf4ef90.js.map",
-    "787.779cc9da.chunk.js.map": "/ILS-Logistics-Task/static/js/787.779cc9da.chunk.js.map"
+    "main.css": "/Routes-visualisator/static/css/main.a48f2fb0.css",
+    "main.js": "/Routes-visualisator/static/js/main.64042525.js",
+    "static/js/787.4e279944.chunk.js": "/Routes-visualisator/static/js/787.4e279944.chunk.js",
+    "index.html": "/Routes-visualisator/index.html",
+    "main.a48f2fb0.css.map": "/Routes-visualisator/static/css/main.a48f2fb0.css.map",
+    "main.64042525.js.map": "/Routes-visualisator/static/js/main.64042525.js.map",
+    "787.4e279944.chunk.js.map": "/Routes-visualisator/static/js/787.4e279944.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.a48f2fb0.css",
-    "static/js/main.edf4ef90.js"
+    "static/js/main.64042525.js"
   ]
 }
