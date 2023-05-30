@@ -2,16 +2,18 @@ import React, { useState, useEffect } from 'react';
 
 import { Layout } from 'antd';
 
-import Table from '../Table/Table';
-import Menu from '../Menu/Menu';
+import { useWidthHandler } from 'hooks/useWidthHandler';
 
-import { useWidthHandler } from '../../hooks/useWidthHandler';
+import Table from 'components/Table/Table';
+import Menu from 'components/Menu/Menu';
 
 // /. imports
 
 interface propTypes {
     isValidCondition: boolean;
 }
+
+// /. interfaces
 
 const Sidebar: React.FC<propTypes> = ({ isValidCondition }) => {
     const [isCollapsed, setCollapsedStatus] = useState(true);

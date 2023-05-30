@@ -1,8 +1,11 @@
 import { call, put, takeEvery, select } from 'redux-saga/effects';
 
-import { fetchPolylineData } from '../api/fetchPolylineData';
+import {
+    setPolylineData,
+    triggerPolylineFetch
+} from 'app/slices/polylineSlice';
 
-import { setPolylineData, triggerPolylineFetch } from '../slices/polylineSlice';
+import { fetchPolylineData } from 'app/api/fetchPolylineData';
 
 // /. imports
 

@@ -2,15 +2,15 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 import { Table as AntdTable, Empty } from 'antd';
 
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useAppSelector, useAppDispatch } from 'app/hooks';
 
 import {
     setCurrentRouteCoords,
     setCurrentRequestKey,
     switchTableDataLoadingStatus
-} from '../../app/slices/requestSlice';
+} from 'app/slices/requestSlice';
 
-import { getPropertiesOfHTMLel } from '../../helpers/getPropertyOfHtmlEl';
+import { getPropertiesOfHTMLel } from 'helpers/getPropertyOfHtmlEl';
 
 import type { ColumnsType } from 'antd/es/table';
 

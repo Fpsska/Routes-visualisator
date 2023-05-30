@@ -4,37 +4,36 @@ import { MapContainer } from 'react-leaflet';
 
 import { Layout, theme, Row, Col } from 'antd';
 
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useWidthHandler } from 'hooks/useWidthHandler';
+
+import Preloader from 'components/Preloader/Preloader';
+
+import { fetchRequestsData } from 'app/api/fetchRequestsData';
+
+import { fetchPolylineData } from 'app/api/fetchPolylineData';
 
 import {
     switchReqLoadingStatus,
     setReqError,
     triggerRequestsDataFetch,
     setCoordsDataEmptyStatus
-} from '../../app/slices/requestSlice';
+} from 'app/slices/requestSlice';
 
-import {
-    setPolyError,
-    triggerPolylineFetch
-} from '../../app/slices/polylineSlice';
+import { setPolyError, triggerPolylineFetch } from 'app/slices/polylineSlice';
 
-import Map from '../Map/Map';
-import MapPlaceholder from '../Map/MapPlaceholder';
-import Sidebar from '../Sidebar/Sidebar';
-import Menu from '../Menu/Menu';
-import Preloader from '../Preloader/Preloader';
-import Error from '../Error/Error';
+import { useAppSelector, useAppDispatch } from 'app/hooks';
 
-import { fetchRequestsData } from '../../app/api/fetchRequestsData';
-import { fetchPolylineData } from '../../app/api/fetchPolylineData';
-
-import { useWidthHandler } from '../../hooks/useWidthHandler';
+import Map from 'components/Map/Map';
+import MapPlaceholder from 'components/Map/MapPlaceholder';
+import Sidebar from 'components/Sidebar/Sidebar';
+import Menu from 'components/Menu/Menu';
+import Error from 'components/Error/Error';
 
 const { Content, Footer } = Layout;
 
 import './App.css';
-import '../../assets/styles/_reset.scss';
-import '../../assets/styles/style.scss';
+import 'assets/styles/_reset.scss';
+import 'assets/styles/style.scss';
 
 // /. imports
 

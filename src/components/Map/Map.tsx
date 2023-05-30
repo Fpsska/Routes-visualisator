@@ -12,11 +12,11 @@ import {
 
 import polyline from '@mapbox/polyline';
 
-import { useAppSelector } from '../../app/hooks';
+import { useAppSelector } from 'app/hooks';
 
-import { getCustomMarker } from '../../helpers/getCustomMarker';
+import { getCustomMarker } from 'helpers/getCustomMarker';
 
-import { useWidthHandler } from '../../hooks/useWidthHandler';
+import { useWidthHandler } from 'hooks/useWidthHandler';
 
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility';

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, current } from '@reduxjs/toolkit';
 
-import { IrequestSlice, Irequest } from '../../Types/requestSliceTypes';
+import { IrequestSlice, Irequest } from 'types/requestSliceTypes';
 
 // /. imports
 

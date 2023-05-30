@@ -5,12 +5,12 @@ import { Menu as AntdMenu } from 'antd';
 
 import { MenuMode } from 'rc-menu/lib/interface';
 
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useAppSelector, useAppDispatch } from 'app/hooks';
 
 import {
     setCurrentRouteCoords,
     setCurrentRequestKey
-} from '../../app/slices/requestSlice';
+} from 'app/slices/requestSlice';
 
 // /. imports
 

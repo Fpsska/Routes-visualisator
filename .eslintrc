@@ -1,12 +1,16 @@
 {
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "paths": [
+                    "src"
+                ]
+            }
+        }
+    },
     "env": {
         "browser": true,
         "es2021": true
-    },
-    "settings": {
-        "react": {
-            "version": "detect"
-        }
     },
     "extends": [
         "eslint:recommended",
@@ -31,7 +35,10 @@
     },
     "rules": {
         "prettier/prettier": [
-            "warn"
+            "warn",
+            {
+                "endOfLine": "auto"
+            }
         ],
         "no-console": "warn",
         "quotes": [

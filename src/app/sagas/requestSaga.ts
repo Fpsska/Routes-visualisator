@@ -1,10 +1,11 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 
-import { fetchRequestsData } from '../api/fetchRequestsData';
+import { fetchRequestsData } from 'app/api/fetchRequestsData';
+
 import {
     setRequestsData,
     triggerRequestsDataFetch
-} from '../slices/requestSlice';
+} from 'app/slices/requestSlice';
 
 // /. imports
 
