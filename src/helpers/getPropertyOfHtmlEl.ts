@@ -1,5 +1,18 @@
-export function getPropertiesOfHTMLel(element: any): { [key: string]: number } {
-    const elementProp = element.getBoundingClientRect();
+type TypeRectResult = {
+    bottom: number;
+    height: number;
+    left: number;
+    right: number;
+    top: number;
+    width: number;
+};
 
-    return { height: elementProp.height, width: elementProp.width };
+// /. types
+
+export function getPropertiesOfHTMLel(
+    element: HTMLElement
+): TypeRectResult | null {
+    if (!element) return null;
+
+    return element.getBoundingClientRect();
 }

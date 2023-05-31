@@ -2,7 +2,7 @@ import L from 'leaflet';
 
 // /. imports
 
-export function getCustomMarker(color: string): any {
+export function getCustomMarker(color: string): L.Icon {
     return new L.Icon({
         iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-${color}.png`,
         iconRetinaUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${color}.png`,

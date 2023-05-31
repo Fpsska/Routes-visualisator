@@ -20,16 +20,16 @@ import './table.scss';
 
 // /. imports
 
-interface DataType {
+type TypeData = {
     key: React.Key;
     requestNumber: number;
     latitudeStart: number;
     longitudeStart: number;
     latitudeEnd: number;
     longitudeEnd: number;
-}
+};
 
-// /. interfaces
+// /. types
 
 const Table: React.FC = () => {
     const {
@@ -40,8 +40,7 @@ const Table: React.FC = () => {
         requestsFetchError
     } = useAppSelector(state => state.requestSlice);
 
-    const [tableData, setTableData] = useState<DataType[]>([]);
-
+    const [tableData, setTableData] = useState<TypeData[]>([]);
     const [tableHeaderHeight, setTableHeaderHeight] = useState<number>(0);
 
     const dispatch = useAppDispatch();
@@ -52,7 +51,7 @@ const Table: React.FC = () => {
     const isRequestsDataEmpty = !requests || requests.length === 0;
     const isDataLoading = isRequestsDataLoading || isTableDataLoading;
 
-    const columns: ColumnsType<DataType> = [
+    const columns: ColumnsType<TypeData> = [
         {
             title: '№ request',
             dataIndex: 'requestNumber',
@@ -86,7 +85,7 @@ const Table: React.FC = () => {
         }
     ];
 
-    const rowSelection: TableRowSelection<DataType> = {
+    const rowSelection: TableRowSelection<TypeData> = {
         selectedRowKeys: currentRequestKey.map(item => +item),
         onSelect: record => onSelectChange(record.requestNumber),
         type: 'radio'
@@ -118,8 +117,10 @@ const Table: React.FC = () => {
                 tableRef.current.childNodes[0].childNodes[0].childNodes[0]
                     .childNodes[0].childNodes[0];
 
-            const { height } = getPropertiesOfHTMLel(tableHeader);
-            setTableHeaderHeight(height);
+            const tableHeaderRect = getPropertiesOfHTMLel(
+                tableHeader as HTMLDivElement
+            );
+            tableHeaderRect && setTableHeaderHeight(tableHeaderRect.height);
         }, 100);
     }, [tableRef, isRequestsDataEmpty]);
 
